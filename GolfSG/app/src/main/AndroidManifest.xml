@@ -9,12 +9,22 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.redballgolf.golfSG.registerLogin.Login"
-            android:label="@string/title_activity_login"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name="com.redballgolf.golfSG.registerLogin.Register"
             android:label="@string/title_activity_register"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.redballgolf.golfSG.leagues.IndividualLeague"
+            android:label="@string/title_activity_individual_league"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="com.redballgolf.golfSG.leagues.LeaguesMenu"
+            android:label="@string/title_activity_leagues_menu"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

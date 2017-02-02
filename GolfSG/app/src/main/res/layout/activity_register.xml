@@ -7,9 +7,9 @@
     android:fitsSystemWindows="true"
     tools:context="com.redballgolf.golfSG.registerLogin.Register">
 
+
     <include layout="@layout/toolbar" />
     <include layout="@layout/content_register" />
-
 
 
 </android.support.design.widget.CoordinatorLayout>
