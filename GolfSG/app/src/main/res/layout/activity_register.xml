@@ -9,7 +9,10 @@
 
 
     <include layout="@layout/toolbar" />
-    <include layout="@layout/content_register" />
+    <include layout="@layout/content_register"
+        android:id="@+id/include" />
+
+
 
 
 </android.support.design.widget.CoordinatorLayout>
