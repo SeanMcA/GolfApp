@@ -9,8 +9,8 @@
 
 
     <include layout="@layout/toolbar" />
-    <include layout="@layout/content_register"
-        android:id="@+id/include" />
+    <include layout="@layout/content_register"/>
+
 
 
 
