@@ -10,4 +10,8 @@
     <string name="title_activity_blah">blah</string>
     <string name="title_activity_individual_league">IndividualLeague</string>
     <string name="title_activity_leagues_menu">LeaguesMenu</string>
+    <string name="password_doesnt_match">Passwords do not match!</string>
+    <string name="UsernameAlreadyInUse">Username is already in use!</string>
+    <string name="EmailAlreadyInUse">Email is not available</string>
+    <string name="YouHaveBeenRegistered">You have been registered.</string>
 </resources>
