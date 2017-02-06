@@ -36,7 +36,7 @@
             android:label="@string/title_activity_leagues_menu"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <activity android:name="com.redballgolf.golfSG.GPS.BlankGPS" />
+        <activity android:name="com.redballgolf.golfSG.GPS.GPS" />
 
         <activity android:name="com.redballgolf.golfSG.GPS.startGPS">
         </activity>

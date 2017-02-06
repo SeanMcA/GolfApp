@@ -1,28 +1,30 @@
 package com.redballgolf.golfSG.GPS;
 
-import android.util.Pair;
 
-/**
- * Created by sitting-room on 05/02/2017.
- */
 
 public class Coordinates {
-    private Double latitude;
-    private Double longitude;
+    private static double latitude;
+    private static double longitude;
+    private static double accuracy;
 
-    public Coordinates(Double latitude, Double longitude) {
-        this.latitude = latitude;
-        this.longitude = longitude;
+
+    public static double getLatitude() {
+        return latitude;
     }
 
-
-    /**
-     * Convenience method for creating an appropriately typed pair.
-     * @param latitude the first object in the Pair
-     * @param longitude the second object in the pair
-     * @return a Pair that is templatized with the types of a and b
-     */
-    public static <A, B> Pair <A, B> create(A latitude, B longitude) {
-        return new Pair<A, B>(latitude, longitude);
+    protected static void setLatitude(Double latitude) {
+        Coordinates.latitude = latitude;
     }
+
+    public static double getLongitude() {
+        return longitude;
+    }
+
+    protected static void setLongitude(Double longitude) {
+        Coordinates.longitude = longitude;
+    }
+
+    public static double getAccuracy() { return accuracy; }
+
+    protected static void setAccuracy(double accuracy) { Coordinates.accuracy = accuracy; }
 }//Coordiantes
