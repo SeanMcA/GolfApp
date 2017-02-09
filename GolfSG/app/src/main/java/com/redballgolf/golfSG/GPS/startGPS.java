@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.example.sitting_room.golfsg.R;
+import com.redballgolf.golfSG.R;
 
 public class startGPS extends Activity {
     TextView myLocationText;

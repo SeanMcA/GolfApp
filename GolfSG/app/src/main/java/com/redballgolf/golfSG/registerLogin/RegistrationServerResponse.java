@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
-import com.example.sitting_room.golfsg.R;
+import com.redballgolf.golfSG.R;
 
 /**
  * This class decideds what to do with the data returned from the server.

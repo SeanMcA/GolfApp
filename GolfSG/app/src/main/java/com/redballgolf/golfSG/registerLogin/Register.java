@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.sitting_room.golfsg.R;
+import com.redballgolf.golfSG.R;
 import com.redballgolf.golfSG.GPS.startGPS;
 
 public class Register extends AppCompatActivity {

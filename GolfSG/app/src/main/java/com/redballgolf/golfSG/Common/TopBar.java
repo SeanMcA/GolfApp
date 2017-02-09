@@ -4,7 +4,7 @@ package com.redballgolf.golfSG.Common;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-import com.example.sitting_room.golfsg.R;
+import com.redballgolf.golfSG.R;
 
 
 public class TopBar extends AppCompatActivity {

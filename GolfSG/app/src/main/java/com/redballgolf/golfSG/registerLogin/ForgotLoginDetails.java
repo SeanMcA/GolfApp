@@ -9,7 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
-import com.example.sitting_room.golfsg.R;
+import com.redballgolf.golfSG.R;
 import com.redballgolf.golfSG.Common.TopBar;
 
 public class ForgotLoginDetails extends AppCompatActivity {
