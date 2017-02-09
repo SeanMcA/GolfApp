@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.sitting_room.golfsg.R;
+import com.redballgolf.golfSG.Common.TopBar;
 
 public class Login extends AppCompatActivity {
 
@@ -23,10 +24,14 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        TopBar tb = new TopBar();
+//        tb.create(toolbar);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.mipmap.ic_launcher);
         setSupportActionBar(toolbar);
-
+        //getSupportActionBar().setTitle(sentLeagueName);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
@@ -43,9 +48,10 @@ public class Login extends AppCompatActivity {
      * @param view The view that was clicked
      */
     public void login(View view){
+        Log.i("TAG", "Login scr - login started");
         String username = usernameField.getText().toString();
         String password = passwordField.getText().toString();
-        Log.i(TAG, "Username is : " + username);
+        Log.i("TAG", "Username is : " + username);
         //Call execute in LoginScript class to run in background and return mesage if details are incorrect.
         // If details are correct the set the loginID to the ID rerturned from the DB.
         //Then launch the AfterLoginGuest class.
@@ -58,7 +64,7 @@ public class Login extends AppCompatActivity {
      * @param view The view that was clicked.
      */
     public void ForgotLoginDteails(View view){
-        Intent intentGoToForgotDetailsScreen = new Intent(Login.this,ForgotDetailsScreen.class);
+        Intent intentGoToForgotDetailsScreen = new Intent(Login.this,ForgotLoginDetails.class);
         startActivity(intentGoToForgotDetailsScreen);
     }
 

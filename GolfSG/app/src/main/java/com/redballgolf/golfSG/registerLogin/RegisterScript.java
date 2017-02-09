@@ -2,17 +2,16 @@ package com.redballgolf.golfSG.registerLogin;
 
 
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.URL;
 import java.net.URLConnection;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.TextView;
+
+import com.redballgolf.golfSG.Common.CreateUrlConnection;
+import com.redballgolf.golfSG.Common.DataReturnedFromServer;
+import com.redballgolf.golfSG.Common.WriteDataToLink;
 
 
 public class RegisterScript extends AsyncTask<String,Void,String>{
@@ -35,17 +34,17 @@ public class RegisterScript extends AsyncTask<String,Void,String>{
     protected String doInBackground(String... args) {
 
         try{
+            //The next two lines change for each Url request.
             String dataToSend = RegisterData.regData(args);
             String webUrl = RegisterData.registerUrl();
 
-            URLConnection urlConnection = createUrlConnection(webUrl);
-            writeDataToLink(dataToSend, urlConnection);
-
-            return returnedData(urlConnection);
-        }//try
+            URLConnection urlConnection = CreateUrlConnection.create(webUrl);
+            WriteDataToLink.write(dataToSend, urlConnection);
+            return DataReturnedFromServer.readDataFrom(urlConnection);
+        }
         catch(Exception e){
             return new String("Exception: " + e.getMessage());
-        }//catch
+        }
     }
 
 
@@ -53,34 +52,5 @@ public class RegisterScript extends AsyncTask<String,Void,String>{
     protected void onPostExecute(String result){
         Log.i(TAG, "Returned register result is: " + result);
         RegistrationServerResponse.output(context, result, regResultTV);
-    }//onPostExecute
-
-
-
-    URLConnection createUrlConnection(String link) throws IOException {
-        URL url = new URL(link);
-        URLConnection conn = url.openConnection();
-        conn.setDoOutput(true);
-        return conn;
     }
-
-    Boolean writeDataToLink(String data, URLConnection conn) throws IOException {
-        OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-        wr.write( data );
-        wr.flush();
-        return true;
-    }
-
-    String returnedData(URLConnection urlConnection) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-        StringBuilder stringBuilder = new StringBuilder();
-        String line;
-        while((line = reader.readLine()) != null)
-        {
-            stringBuilder.append(line);
-            break;
-        }
-        return stringBuilder.toString();
-    }
-
-}
+}//class

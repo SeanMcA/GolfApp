@@ -15,4 +15,6 @@
     <string name="EmailAlreadyInUse">Email is not available</string>
     <string name="YouHaveBeenRegistered">You have been registered.</string>
     <string name="UsernameNotAvailable">Username is not available</string>
+    <string name="title_activity_after_login">AfterLogin</string>
+    <string name="title_activity_login_register_option">LoginRegisterOption</string>
 </resources>

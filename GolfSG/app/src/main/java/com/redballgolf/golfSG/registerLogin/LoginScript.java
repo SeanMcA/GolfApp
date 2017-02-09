@@ -1,21 +1,17 @@
 package com.redballgolf.golfSG.registerLogin;
 
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.URL;
 import java.net.URLConnection;
-import java.net.URLEncoder;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.example.sitting_room.golfsg.R;
+import com.redballgolf.golfSG.Common.CreateUrlConnection;
+import com.redballgolf.golfSG.Common.DataReturnedFromServer;
+import com.redballgolf.golfSG.Common.WriteDataToLink;
+import com.redballgolf.golfSG.SharedPreferences.Preferences;
 
 
 public class LoginScript extends AsyncTask<String,Void,String>{
@@ -39,70 +35,31 @@ public class LoginScript extends AsyncTask<String,Void,String>{
     }
 
     @Override
-    protected String doInBackground(String... arg0) {
-
+    protected String doInBackground(String... args) {
         try{
-            String username = arg0[0];
-            String password = arg0[1];
+            String dataToSend = LoginData.loginData(args);
+            String webUrl = LoginData.loginUrl();
 
-            //String link="http://zelusit.com/androidLoginApp.php";
-            String link="http://zelusit.com/androidlogin.php";
-            String data  = URLEncoder.encode("username", "UTF-8") + "=" + URLEncoder.encode(username, "UTF-8");
-            data += "&" + URLEncoder.encode("password", "UTF-8") + "=" + URLEncoder.encode(password, "UTF-8");
-
-
-            //put in seperate class//////////////////////////////////////////////////
-            URL url = new URL(link);
-            URLConnection conn = url.openConnection();
-
-            conn.setDoOutput(true);
-            OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-
-            wr.write( data );
-            wr.flush();
-
-            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-
-            StringBuilder sb = new StringBuilder();
-            String line;
-
-            // Read Server Response
-            while((line = reader.readLine()) != null)
-            {
-                sb.append(line);
-                break;
-            }
-            return sb.toString();
+            URLConnection urlConnection = CreateUrlConnection.create(webUrl);
+            WriteDataToLink.write(dataToSend, urlConnection);
+            return DataReturnedFromServer.readDataFrom(urlConnection);
         }
         catch(Exception e){
             return new String("Exception: " + e.getMessage());
         }
-        /////////////////////////////////////////////////////////////////////////////////////////////////////
     }
-
 
     @Override
     protected void onPostExecute(String result){
-        loginID = result;
-        Log.i(TAG, "Returned login is: " + loginID);
-        if(result.equals("0"))
-        {
-            //Log.i(TAG, "No login returned");
+        Log.i("TAG", "LoginScript - Returned login result is: " + result);
+        if(result.equals("0")){
             loginResultTextview.setText("Login Details are Incorrect");
         }
-        else
-        {
-
-            SharedPreferences sharedPreferences = PreferenceManager
-                    .getDefaultSharedPreferences(context);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("key", loginID);
-            editor.apply();
-
-            context.startActivity(new Intent(context, AfterLoginGuest.class));
+        else{
+            Preferences.insert("loginID", result, context);//
+            context.startActivity(new Intent(context, AfterLogin.class));
         }
-    }//onPostExecute
+        //LoginServerResponse.output(result, loginResultTextview, context);
 
-
-
-}
+    }
+}//class
