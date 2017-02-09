@@ -33,11 +33,12 @@
             android:label="@string/title_activity_leagues_menu"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name="com.redballgolf.golfSG.GPS.GPS" />
-        <activity android:name="com.redballgolf.golfSG.GPS.startGPS"></activity>
+        <activity android:name="com.redballgolf.golfSG.GPS.startGPS" />
         <activity
             android:name="com.redballgolf.golfSG.registerLogin.Login"
             android:label="@string/title_activity_login"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="com.redballgolf.golfSG.registerLogin.ForgotLoginDetails"></activity>
     </application>
 
 </manifest>

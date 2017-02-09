@@ -14,4 +14,5 @@
     <string name="UsernameAlreadyInUse">Username is already in use!</string>
     <string name="EmailAlreadyInUse">Email is not available</string>
     <string name="YouHaveBeenRegistered">You have been registered.</string>
+    <string name="UsernameNotAvailable">Username is not available</string>
 </resources>

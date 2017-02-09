@@ -25,14 +25,13 @@ public class Register extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.mipmap.ic_launcher);
         setSupportActionBar(toolbar);
+
         regUsernameET = (EditText)findViewById(R.id.usernameET);
         regEmailET = (EditText)findViewById(R.id.regEmailET);
         regPasswordET = (EditText)findViewById(R.id.regPasswordET);
         regConfirmPasswordET = (EditText)findViewById(R.id.regConfirmPasswordET);
         regResultTV = (TextView)findViewById(R.id.regResultTV);
-
-
-    }
+    }//onCreate
 
     public void register(View view){
         String username = regUsernameET.getText().toString();
