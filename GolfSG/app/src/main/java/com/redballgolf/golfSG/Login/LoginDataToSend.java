@@ -1,4 +1,4 @@
-package com.redballgolf.golfSG.registerLogin;
+package com.redballgolf.golfSG.Login;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -7,7 +7,7 @@ import java.net.URLEncoder;
  * Created by sitting-room on 09/02/2017.
  */
 
-public class LoginData {
+class LoginDataToSend {
     public static String loginData(String... args) throws UnsupportedEncodingException {
         String username = args[0];
         String password = args[1];

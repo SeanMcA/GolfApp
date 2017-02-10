@@ -13,12 +13,10 @@ import android.util.Log;
 public class GPS {
     private Context mContext;
 
-
-    GPS(Context mContext)
+    public GPS(Context mContext)
     {
         this.mContext = mContext;
     }
-
 
     void getLocation() {
         Log.i("TAG", "GPS getLocation started");

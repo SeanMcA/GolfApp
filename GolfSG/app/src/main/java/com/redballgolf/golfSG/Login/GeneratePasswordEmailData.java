@@ -1,14 +1,12 @@
-package com.redballgolf.golfSG.registerLogin;
+package com.redballgolf.golfSG.Login;
 
 import android.content.Intent;
 import android.net.Uri;
 
-import static com.redballgolf.golfSG.registerLogin.ForgotLoginDetails.newPassword;
-import static com.redballgolf.golfSG.registerLogin.ForgotLoginDetails.userEmail;
+import static com.redballgolf.golfSG.Login.ForgotLoginDetails.newPassword;
+import static com.redballgolf.golfSG.Login.ForgotLoginDetails.userEmail;
 
-/**
- * Created by sitting-room on 09/02/2017.
- */
+
 
 public class GeneratePasswordEmailData {
     public static Intent create(String username){

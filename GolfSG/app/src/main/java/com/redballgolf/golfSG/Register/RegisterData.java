@@ -1,4 +1,4 @@
-package com.redballgolf.golfSG.registerLogin;
+package com.redballgolf.golfSG.Register;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

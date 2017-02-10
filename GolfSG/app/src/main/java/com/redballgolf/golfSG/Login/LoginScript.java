@@ -1,4 +1,4 @@
-package com.redballgolf.golfSG.registerLogin;
+package com.redballgolf.golfSG.Login;
 
 
 import java.net.URLConnection;
@@ -25,8 +25,6 @@ public class LoginScript extends AsyncTask<String,Void,String>{
     public LoginScript(Context context, TextView loginResultTextview) {
         this.context = context;
         this.loginResultTextview = loginResultTextview;
-        String PREF_NAME = "prefs";
-        context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
     }
 
 
@@ -37,8 +35,8 @@ public class LoginScript extends AsyncTask<String,Void,String>{
     @Override
     protected String doInBackground(String... args) {
         try{
-            String dataToSend = LoginData.loginData(args);
-            String webUrl = LoginData.loginUrl();
+            String dataToSend = LoginDataToSend.loginData(args);
+            String webUrl = LoginDataToSend.loginUrl();
 
             URLConnection urlConnection = CreateUrlConnection.create(webUrl);
             WriteDataToLink.write(dataToSend, urlConnection);
@@ -59,7 +57,6 @@ public class LoginScript extends AsyncTask<String,Void,String>{
             Preferences.insert("loginID", result, context);//
             context.startActivity(new Intent(context, AfterLogin.class));
         }
-        //LoginServerResponse.output(result, loginResultTextview, context);
 
     }
 }//class

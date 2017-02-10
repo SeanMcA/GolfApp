@@ -1,11 +1,11 @@
-package com.redballgolf.golfSG.registerLogin;
+package com.redballgolf.golfSG.Register;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
 import com.redballgolf.golfSG.R;
+import com.redballgolf.golfSG.Login.Login;
 
 /**
  * This class decideds what to do with the data returned from the server.

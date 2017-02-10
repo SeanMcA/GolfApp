@@ -6,7 +6,7 @@
     <string name="register">Register</string>
     <string name="enter_username_here">Enter Username here.</string>
     <string name="enter_password_here">Enter Password here.</string>
-    <string name="enter_your_name_here">Enter your name here...</string>
+    <string name="enter_your_name_here">Enter your name here:</string>
     <string name="title_activity_blah">blah</string>
     <string name="title_activity_individual_league">IndividualLeague</string>
     <string name="title_activity_leagues_menu">LeaguesMenu</string>
@@ -17,4 +17,7 @@
     <string name="UsernameNotAvailable">Username is not available</string>
     <string name="title_activity_after_login">AfterLogin</string>
     <string name="title_activity_login_register_option">LoginRegisterOption</string>
+    <string name="title_activity_base">BaseActivity</string>
+    <string name="forgotLoginDetails">ForgotLoginDetails</string>
+    <string name="Gps">GPS</string>
 </resources>

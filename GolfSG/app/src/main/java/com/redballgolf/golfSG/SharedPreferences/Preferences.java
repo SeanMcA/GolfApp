@@ -5,12 +5,9 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.redballgolf.golfSG.registerLogin.LoginScript;
-
 
 public class Preferences {
     public static final String MyPREFERENCES = "MyPrefs";
-    //SharedPreferences sharedpreferences;
 
     public static void insert(String key, String data, Context context){
         Log.i("TAG", "Preferences class - insert");
@@ -23,10 +20,12 @@ public class Preferences {
     }
 
     public static String getPreferences(Context context, String key){
+        final String DEFAULT_VALUE = "0";
         Log.i("TAG", "Preferences class - get: " + key);
         //SharedPreferences sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String data = sharedPreferences.getString(key, "0");//0 is the default if no response is given
+        String data = sharedPreferences.getString(key, DEFAULT_VALUE);
+        Log.i("TAG", "Preferences class - get - returns: " + data);
         return data;
     }
 

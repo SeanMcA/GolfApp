@@ -1,4 +1,4 @@
-package com.redballgolf.golfSG.registerLogin;
+package com.redballgolf.golfSG.Register;
 
 
 
@@ -32,7 +32,6 @@ public class RegisterScript extends AsyncTask<String,Void,String>{
 
     @Override
     protected String doInBackground(String... args) {
-
         try{
             //The next two lines change for each Url request.
             String dataToSend = RegisterData.regData(args);
@@ -46,7 +45,6 @@ public class RegisterScript extends AsyncTask<String,Void,String>{
             return new String("Exception: " + e.getMessage());
         }
     }
-
 
     @Override
     protected void onPostExecute(String result){

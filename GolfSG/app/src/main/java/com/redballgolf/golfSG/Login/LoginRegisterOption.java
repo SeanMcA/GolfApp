@@ -1,23 +1,21 @@
-package com.redballgolf.golfSG.registerLogin;
+package com.redballgolf.golfSG.Login;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.redballgolf.golfSG.Common.BaseActivity;
 import com.redballgolf.golfSG.R;
+import com.redballgolf.golfSG.Register.Register;
 
-public class LoginRegisterOption extends AppCompatActivity {
+public class LoginRegisterOption extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_register_option);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
     }
 
     public void goToLoginScreen(View view){
