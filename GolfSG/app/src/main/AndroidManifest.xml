@@ -27,7 +27,7 @@
         <activity
             android:name=".Register.Register"
             android:label="@string/title_activity_register"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".leagues.IndividualLeague"
             android:label="@string/title_activity_individual_league"
@@ -36,7 +36,8 @@
             android:name=".leagues.LeaguesMenu"
             android:label="@string/title_activity_leagues_menu"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".GPS.startGPS"
+        <activity
+            android:name=".GPS.startGPS"
             android:label="@string/Gps"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -54,7 +55,11 @@
         <activity
             android:name=".Common.BaseActivity"
             android:label="@string/title_activity_base"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".RoundOfGolf.NewRound"
+            android:label="@string/title_activity_new_round"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
