@@ -32,7 +32,7 @@ public class ExtractCoursesFromJsonString {
     private static String courseID;
     private static String coursePin;
 
-    public static void getCourses(String json, Context context) {
+    public static ArrayList<HashMap<String, String>> getCourses(String json) {
         if (json != null) {
             try {
                 // Hashmap for ListView
@@ -80,6 +80,7 @@ public class ExtractCoursesFromJsonString {
             Log.i("TAG", " Couldn't get any data from the url");
         }
         Log.i("TAG", "Extract - start adapter");
+        return CourseList;
     }//ParsonJson
 
 }

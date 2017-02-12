@@ -1,4 +1,4 @@
-package com.redballgolf.golfSG.RoundOfGolf;
+package com.redballgolf.golfSG.leagues;
 
 import android.util.Log;
 
@@ -10,14 +10,32 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
-/**
- * Created by sitting-room on 12/02/2017.
- */
 
-public class ExtractCourses {
+
+public class ExtractLeagues {
+    // JSON Node names
+    private static final String TAG_lEAGUEINFO = "league_info";//this is the name at the start of the json data returned by url
+    private static final String TAG_LEAGUE_NAME = "league_name";
+    private static final String TAG_LEAGUE_DAYS_LEFT = "days_left";
+    private static final String TAG_LEAGUEID = "league_id";
+    private static final String TAG_LEAGUE_START_DATE = "start_date";
+    private static final String TAG_LEAGUE_END_DATE = "finish_date";
+    private static final String TAG_LEAGUE_TYPE = "type";
+
+    public static String[] leagueNamesArray;
+    public static Integer[] leagueIDsArray;
+    public static String[] leagueTypeArray;
+    public static String[] leagueStartDateArray;
+    public static String[] leagueEndDateArray;
+
+    public static Integer daysLeft;
+    public static String stringDaysLeft;
+
+
 
     /**
      * This method takes the json data returned from the web database and iteraties through it
@@ -49,7 +67,7 @@ public class ExtractCourses {
 
                 //loop through all leagues
                 for (int i = 0; i < leagues.length(); i++) {
-                    Log.i(TAG, "leagues length is: " + leagues.length());
+                    Log.i("TAG", "leagues length is: " + leagues.length());
                     JSONObject c = leagues.getJSONObject(i);
 
                     String leagueName = c.getString(TAG_LEAGUE_NAME);
@@ -92,7 +110,7 @@ public class ExtractCourses {
                     }else if(leagueType.equals("sg_putting")){
                         leagueTypeDisplay = "Putting League";
                     }else leagueTypeDisplay ="";
-                    Log.i(TAG,"League type is: " + leagueTypeDisplay);
+                    Log.i("TAG","League type is: " + leagueTypeDisplay);
 
                     //Log.i(TAG, "league id is: " + leagueid);
 
@@ -127,8 +145,21 @@ public class ExtractCourses {
                 return null;
             }
         } else {
-            Log.i(TAG, "ServiceHandler, Couldn't get any data from the url");
+            Log.i("TAG", "ServiceHandler, Couldn't get any data from the url");
             return null;
         }
     }//ParsonJson
+
+    /**
+     * This method calculates the number of days between today and the end of a league.
+     * @param d2 the end date of the league.
+     * @return The number of days between today and the end of the league.
+     */
+    public static int daysBetween(Date d2){
+        //Log.i(TAG,"daysBetween started");
+        Date d1 = Calendar.getInstance().getTime();
+        //Log.i(TAG,"todays date: " + d1);
+        return (int)((d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
+
+    }
 }

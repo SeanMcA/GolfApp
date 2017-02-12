@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -60,11 +61,15 @@ public class NewRound extends BaseActivity implements AdapterView.OnItemSelected
     TextView selected_course;
     private Vibrator vibe;
 
+
+
     private static final String TAG = "TEST";
     public static String LoggedInId;
 
     private static final String FACILITY_NAME = "facility_name";
     private static final String COURSE_NAME = "name";
+    private static final String TAG_FACILITY_NAME = "facility_name";
+    private static final String TAG_COURSE_NAME = "name";
 
     public static String  h1lat;
     public static String  h1long;
@@ -144,14 +149,69 @@ public class NewRound extends BaseActivity implements AdapterView.OnItemSelected
                     + Coordinates.getLatitude() + "&longitude=" + Coordinates.getLongitude();
             GetListOfCourses listOfCourses = new GetListOfCourses();
             jsonData = listOfCourses.retrieveCourses(url);
-            mylistOfCourses = ExtractCourses.ParseJSON(jsonData);
+            mylistOfCourses = ExtractCoursesFromJsonString.getCourses(jsonData);
             return null;
         }
 
+        /**
+         * After the json data is returened and Parsed. If there is any data in the leagueList ArrayList then
+         * this means that leagues were returned.
+         * The leagues are displayed and if the user is not part of any leagues then the user
+         * is sent back to the AfterLoginGuest page.
+         * @param result The Parsed json data.
+         */
         @Override
-        protected void onPostExecute(Void data){
+        protected void onPostExecute(Void result) {
+            Log.i(TAG, "onPostExecute Json String: " + jsonData);
 
-        }
+            listOfCoursesLV = (ListView) findViewById(R.id.listOfCourses);
+            super.onPostExecute(result);
+            //listview = (ListView) findViewById(R.id.list);
+            // Dismiss the progress dialog
+            if (pDialog.isShowing())
+                pDialog.dismiss();
+
+
+            //If leagueList is not null the user is a memeber of at least one league.
+            //If it is null then they are not a member of any leagues.
+            if (mylistOfCourses != null) {
+                /**
+                 * Updating parsed JSON data into ListView
+                 * */
+                ListAdapter adapter = new SimpleAdapter(
+                        NewRound.this, mylistOfCourses,
+                        R.layout.course_list_layout, new String[]{TAG_FACILITY_NAME, TAG_COURSE_NAME}, new int[]{R.id.facility_name, R.id.course_name}); //The new String above says which info goes in which TextView
+
+                listOfCoursesLV.setAdapter(adapter);
+                listOfCoursesLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view,
+                                            int position, long id) {
+                        //Log.i(TAG, "League id from array is: " + leagueIDsArray[position]);
+
+//                        Intent intentIndividualLeagues = new Intent(ListOfLeagues.this, IndividualLeague.class);
+//                        intentIndividualLeagues.putExtra("leagueID", leagueIDsArray[position]);
+//                        intentIndividualLeagues.putExtra("leagueType", leagueTypeArray[position]);
+//                        intentIndividualLeagues.putExtra("leagueStartDate", leagueStartDateArray[position]);
+//                        intentIndividualLeagues.putExtra("leagueEndDate", leagueEndDateArray[position]);
+//                        intentIndividualLeagues.putExtra("leagueName", leagueNamesArray[position]);
+                        //Log.i(TAG, "Sending LeagueId: " + leagueIDsArray[position]);
+                        //Log.i(TAG, "Sending LeagueTYPE: " + leagueTypeArray[position]);
+                        //startActivity(intentIndividualLeagues);
+
+                    }//onItemClick
+                });
+            }
+            else
+            {
+                Toast toast= Toast.makeText(getApplicationContext(),
+                        "You are not a member of any leagues yet.", Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.TOP|Gravity.CENTER, 0, 150);
+                toast.show();
+            }
+
+        }//onPostExecute
 
     }//Retrieve class
 
@@ -323,101 +383,5 @@ public class NewRound extends BaseActivity implements AdapterView.OnItemSelected
 
 
 
-
-
-
-
-   private void checkIfUserHasSelectedCourse(){
-       if(CourseList != null) {
-           listOfCoursesLV.setAdapter(adapter);
-           listOfCoursesLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-               @Override
-               public void onItemClick(AdapterView<?> parent, View view,
-                                       int position, long id) {
-                   //Log.i(TAG, "League id from array is: " + leagueIDsArray[position]);
-
-                   //Intent intentIndividualLeagues = new Intent(NewRound.this, ShotInputScreen.class);
-                   //intentIndividualLeagues.putExtra("courseID", courseIDsArray[position]);
-                   Log.i(TAG, "Course ID: " + courseIDsArray[position]);
-                   courseID = courseIDsArray[position];
-                   selectedCourseName = courseNamesArray[position];
-                   //Log.i(TAG, "Sending LeagueId: " + leagueIDsArray[position]);
-                   //Log.i(TAG, "Sending LeagueTYPE: " + leagueTypeArray[position]);
-                   //startActivity(intentIndividualLeagues);
-                   selected_course.setText("" + selectedCourseName);
-                   vibe.vibrate(300);
-
-
-                   //if course is mapped (there is data in the coursePinsArray at the position of the selected course)
-                   //then create an ArrayList called pins. The comma seperated text is split at the commas
-                   //and each value is put into an array element. The elements are then put into shared preferences.
-                   //Mapped is 'yes' if the course is mapped and 'no' if it is not.
-
-                   //REALLY NEED TO SLASH AND BURN HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                   if (coursePinsArray[position].isEmpty()) {
-                       Log.i(TAG, "Course not mapped putting no in SP");
-                       SharedPreferences sharedPreferences = PreferenceManager
-                               .getDefaultSharedPreferences(NewRound.this);
-                       SharedPreferences.Editor editor = sharedPreferences.edit();
-                       editor.putString("mapped", no);
-                       editor.putString("courseID", courseID);
-                       editor.apply();
-                   } else {
-                       Log.i(TAG, "Course  mapped putting YES in SP");
-                       pins = new ArrayList<>(Arrays.asList(coursePinsArray[position].split(",")));
-
-
-
-                       SharedPreferences sharedPreferences = PreferenceManager
-                               .getDefaultSharedPreferences(NewRound.this);
-                       SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                       //Doesnt need to be put into shared prefs. Put in array
-                       //pins[0] is hole 1 pin latitude
-                       //pins[1] is hole 1 longitude
-                       //etc.
-                       editor.putString("h1lat", h1lat = pins.get(0));
-                       editor.putString("h1long", h1long = pins.get(1));
-                       editor.putString("h2lat", h2lat = pins.get(2));
-                       editor.putString("h2long", h2long = pins.get(3));
-                       editor.putString("h3lat", h3lat = pins.get(4));
-                       editor.putString("h3long", h3long = pins.get(5));
-                       editor.putString("h4lat", h4lat = pins.get(6));
-                       editor.putString("h4long", h4long = pins.get(7));
-                       editor.putString("h5lat", h5lat = pins.get(8));
-                       editor.putString("h5long", h5long = pins.get(9));
-                       editor.putString("h6lat", h6lat = pins.get(10));
-                       editor.putString("h6long", h6long = pins.get(11));
-                       editor.putString("h7lat", h7lat = pins.get(12));
-                       editor.putString("h7long", h7long = pins.get(13));
-                       editor.putString("h8lat", h8lat = pins.get(14));
-                       editor.putString("h8long", h8long = pins.get(15));
-                       editor.putString("h9lat", h9lat = pins.get(16));
-                       editor.putString("h9long", h9long = pins.get(17));
-                       editor.putString("h10lat", h10lat = pins.get(18));
-                       editor.putString("h10long", h10long = pins.get(19));
-                       editor.putString("h11lat", h11lat = pins.get(20));
-                       editor.putString("h11long", h11long = pins.get(21));
-                       editor.putString("h12lat", h12lat = pins.get(22));
-                       editor.putString("h12long", h12long = pins.get(23));
-                       editor.putString("h13lat", h13lat = pins.get(24));
-                       editor.putString("h13long", h13long = pins.get(25));
-                       editor.putString("h14lat", h14lat = pins.get(26));
-                       editor.putString("h14long", h14long = pins.get(27));
-                       editor.putString("h15lat", h15lat = pins.get(28));
-                       editor.putString("h15long", h15long = pins.get(29));
-                       editor.putString("h16lat", h16lat = pins.get(30));
-                       editor.putString("h16long", h16long = pins.get(31));
-                       editor.putString("h17lat", h17lat = pins.get(32));
-                       editor.putString("h17long", h17long = pins.get(33));
-                       editor.putString("h18lat", h18lat = pins.get(34));
-                       editor.putString("h18long", h18long = pins.get(35));
-                       editor.apply();
-                   }//if/else
-               }//onItemClick
-           });
-       }
-   }
 
 }//class
