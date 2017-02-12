@@ -24,7 +24,7 @@ public class Coordinates {
         Coordinates.longitude = longitude;
     }
 
-    public static double getAccuracy() { return accuracy; }
+    public static double getAccuracy() { return 30; }
 
     protected static void setAccuracy(double accuracy) { Coordinates.accuracy = accuracy; }
 }//Coordiantes

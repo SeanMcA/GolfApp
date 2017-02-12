@@ -16,22 +16,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_DATE = "date";
     private static final String COLUMN_USERID = "user_id";
     private static final String COLUMN_COURSE = "course";
-    public static final String COLUMN_LATITUDE = "latitude";
-    public static final String COLUMN_LONGITUDE = "longitude";
-    public static final String COLUMN_HIT_FROM = "hit_from";
-    public static final String COLUMN_HOLE_NUMBER = "hole";
-    public static final String COLUMN_SHOT_NUMBER = "shot_number";
-    public static final String COLUMN_SHOT_DISTANCE = "shot_distance";
-    public static final String COLUMN_SHOT_SCORE = "shot_score";
-    public static final String COLUMN_ROUND_ID = "round_id";
-    public static final String COLUMN_HANDICAP = "handicap";
-    public static final String COLUMN_SG_DRIVING = "sg_driving";
-    public static final String COLUMN_SG_LONG = "sg_long_game";
-    public static final String COLUMN_SG_SHORT = "sg_short_game";
-    public static final String COLUMN_SG_PUTTING = "sg_putting";
-    public static final String COLUMN_AWFUL_SHOTS = "awful_shots";
-    public static final String COLUMN_EXPORTED = "exported";
-    public static final String COLUMN_PENALTY = "penalty";
+    private static final String COLUMN_LATITUDE = "latitude";
+    private static final String COLUMN_LONGITUDE = "longitude";
+    private static final String COLUMN_HIT_FROM = "hit_from";
+    private static final String COLUMN_HOLE_NUMBER = "hole";
+    private static final String COLUMN_SHOT_NUMBER = "shot_number";
+    private static final String COLUMN_SHOT_DISTANCE = "shot_distance";
+    private static final String COLUMN_SHOT_SCORE = "shot_score";
+    private static final String COLUMN_ROUND_ID = "round_id";
+    private static final String COLUMN_HANDICAP = "handicap";
+    private static final String COLUMN_SG_DRIVING = "sg_driving";
+    private static final String COLUMN_SG_LONG = "sg_long_game";
+    private static final String COLUMN_SG_SHORT = "sg_short_game";
+    private static final String COLUMN_SG_PUTTING = "sg_putting";
+    private static final String COLUMN_AWFUL_SHOTS = "awful_shots";
+    private static final String COLUMN_EXPORTED = "exported";
+    private static final String COLUMN_PENALTY = "penalty";
 
     //version number to upgrade database version
     //each time if you Add, Edit table, you need to change the

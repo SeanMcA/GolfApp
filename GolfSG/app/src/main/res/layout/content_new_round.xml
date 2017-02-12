@@ -23,7 +23,7 @@
 
 
     <ListView
-        android:id="@+id/list"
+        android:id="@+id/listOfCourses"
         android:textSize="15sp"
         android:paddingTop="10dp"
         android:layout_width="match_parent"
