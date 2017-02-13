@@ -2,6 +2,7 @@ package com.redballgolf.golfSG.SQLite;
 
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -41,7 +42,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Database Name
     private static final String DATABASE_NAME = "crud.db";
 
-    public DatabaseHelper(Context context ) {
+    public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -155,7 +156,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static void insertstrokebaseline(SQLiteDatabase db, Integer dist, Double driver, Double iron,
                                              Double fairway, Double rough, Double bunker, Double recovery) {
 
-
         ContentValues strokeValues = new ContentValues();
         strokeValues.put("distance", dist);
         strokeValues.put("tee_shot_driver", driver);
@@ -236,7 +236,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_HANDICAP, handicap);
         values.put(COLUMN_USERID, userID);
 
-
         SQLiteDatabase db = this.getWritableDatabase();
 
         //Update DB by inserting date into db.
@@ -292,7 +291,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-
+    public int getRoundID(String today){
+        String query1 = "SELECT _id FROM round WHERE date = '" + today + "';";
+        int roundID = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query1, null);
+        if (cursor.moveToFirst()) {
+            roundID = cursor.getInt(0);
+            Log.i(TAG, "roundId is: " + roundID);
+        }
+        cursor.close();
+        return roundID;
+    }
 
 }//class
 

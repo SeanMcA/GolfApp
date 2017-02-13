@@ -4,7 +4,6 @@ package com.redballgolf.golfSG.RoundOfGolf;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
@@ -12,9 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -125,7 +122,6 @@ public class NewRound extends BaseActivity implements AdapterView.OnItemSelected
 
 
     private class RetrieveListOfCourses extends AsyncTask<Void, Void, Void>{
-        //ArrayList<HashMap<String, String>> CourseListForListView;
         ProgressDialog pDialog;
 
         @Override
@@ -139,87 +135,60 @@ public class NewRound extends BaseActivity implements AdapterView.OnItemSelected
 
         @Override
         protected Void doInBackground(Void... arg0){
-            String url = "http://zelusit.com/androidGetCourses.php?latitude="
-                    + Coordinates.getLatitude() + "&longitude=" + Coordinates.getLongitude();
-            GetListOfCourses listOfCourses = new GetListOfCourses();
-            jsonData = listOfCourses.retrieveCourses(url);
-            mylistOfCourses = ExtractCoursesFromJsonString.getCoursesFromJsonString(jsonData);
+            getCoursesListFromServer();
             return null;
         }
-
 
         @Override
         protected void onPostExecute(Void result) {
             Log.i(TAG, "onPostExecute Json String: " + jsonData);
-
-            listOfCoursesLV = (ListView) findViewById(R.id.listOfCourses);
-            super.onPostExecute(result);
-            //listview = (ListView) findViewById(R.id.list);
-            // Dismiss the progress dialog
-            if (pDialog.isShowing()) {
-                pDialog.dismiss();
-            }
-
-            if (mylistOfCourses != null) {
-                 //Display the parsed JSON data in the ListView
-
-                ListAdapter adapter = new SimpleAdapter(
-                        NewRound.this, mylistOfCourses,
-                        R.layout.course_list_layout, new String[]{TAG_FACILITY_NAME, TAG_COURSE_NAME}, new int[]{R.id.facility_name, R.id.course_name}); //The new String above says which info goes in which TextView
-
-                listOfCoursesLV.setAdapter(adapter);
-                listOfCoursesLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view,
-                                            int position, long id) {
-                        //Log.i(TAG, "League id from array is: " + leagueIDsArray[position]);
-
-                        Log.i(TAG, "Course ID: " + ExtractCoursesFromJsonString.getCourseIDsArray()[position]);
-                        courseID = ExtractCoursesFromJsonString.getCourseIDsArray()[position];
-                        selectedCourseName = ExtractCoursesFromJsonString.getCourseNamesArray()[position];
-                        selected_course.setText("" + selectedCourseName);
-                        vibe.vibrate(300);
-                        Preferences.insert("courseID", courseID, context);
-                    }//onItemClick
-                });
-            }
-            else
-            {
-                ToastMessage.displayLongToastMessage(context, "Could not find any Courses.");
-            }
-        }//onPostExecute
-
-
-
-
-    }//Retrieve class
-
-
-
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        GPS.resumeListeners();
+            displayCoursesInListView(pDialog);//
+        }
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        GPS.removeListeners();
+
+    private void getCoursesListFromServer(){
+        String url = "http://zelusit.com/androidGetCourses.php?latitude="
+                + Coordinates.getLatitude() + "&longitude=" + Coordinates.getLongitude();
+        GetListOfCourses listOfCourses = new GetListOfCourses();
+        jsonData = listOfCourses.retrieveCourses(url);
+        mylistOfCourses = ExtractCoursesFromJsonString.getCoursesFromJsonString(jsonData);
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        handicap = parent.getItemAtPosition(position).toString();
+    private void displayCoursesInListView(ProgressDialog pDialog){
+        listOfCoursesLV = (ListView) findViewById(R.id.listOfCourses);
+        if (pDialog.isShowing()) {
+            pDialog.dismiss();
+        }
+
+        if (mylistOfCourses != null) {
+
+            ListAdapter adapter = new SimpleAdapter(
+                    NewRound.this, mylistOfCourses,
+                    R.layout.course_list_layout, new String[]{TAG_FACILITY_NAME, TAG_COURSE_NAME}, new int[]{R.id.facility_name, R.id.course_name}); //The new String above says which info goes in which TextView
+
+            listOfCoursesLV.setAdapter(adapter);
+            listOfCoursesLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view,
+                                        int position, long id) {
+
+                    //Log.i(TAG, "Course ID: " + ExtractCoursesFromJsonString.getCourseIDsArray()[position]);
+                    courseID = ExtractCoursesFromJsonString.getCourseIDsArray()[position];
+                    selectedCourseName = ExtractCoursesFromJsonString.getCourseNamesArray()[position];
+                    selected_course.setText("" + selectedCourseName);
+                    vibe.vibrate(300);
+                    Preferences.insert("courseID", courseID, context);
+                }//onItemClick
+            });
+        }
+        else
+        {
+            ToastMessage.displayLongToastMessage(context, "Could not find any Courses.");
+        }
     }
 
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-        //put code here.
-    }
 
     public void putInfoInDB(View view){
         today = GetDate.todaysDate();
@@ -240,25 +209,29 @@ public class NewRound extends BaseActivity implements AdapterView.OnItemSelected
     public void getRoundID(){
         try {
             Log.i(TAG, "getRoundID - started");
-            SQLiteOpenHelper myTestDatabaseHelper = new DatabaseHelper(this);
-            //We don’t need to write to the database so we’re using getReadableDatabase().
-            SQLiteDatabase db = myTestDatabaseHelper.getReadableDatabase();
-            //Use cursor to get number of rows where hole_counter equals X
-            String query1 = "SELECT _id FROM round WHERE date = '" + today + "';";
-            //Log.i(TAG, "Summary Query is: " + query1);
-            Cursor cursor = db.rawQuery(query1, null);
-            if (cursor.moveToFirst()) {
-                roundID = cursor.getInt(0);
-                Log.i(TAG, "roundId is: " + roundID);
-            }
-            cursor.close();
+            DatabaseHelper dbHandler = new DatabaseHelper(NewRound.this);
+            roundID = dbHandler.getRoundID(today);
+
+
+//            SQLiteOpenHelper myDatabaseHelper = new DatabaseHelper(this);
+//            //We don’t need to write to the database so we’re using getReadableDatabase().
+//            SQLiteDatabase db = myDatabaseHelper.getReadableDatabase();
+//            //Use cursor to get number of rows where hole_counter equals X
+//            String query1 = "SELECT _id FROM round WHERE date = '" + today + "';";
+//            Cursor cursor = db.rawQuery(query1, null);
+//            if (cursor.moveToFirst()) {
+//                roundID = cursor.getInt(0);
+//                Log.i(TAG, "roundId is: " + roundID);
+//            }
+//            cursor.close();
         }//try
         catch (SQLiteException e) {
             Toast toast = Toast.makeText(this, "Database unavailable", Toast.LENGTH_SHORT);
             toast.show();
         }
-
-        Preferences.insertInt("roundID", roundID, this);
+            Preferences.insertInt("roundID", roundID, this);
+            Round round = new Round();
+            Hole hole = new Hole(roundID, round);
             Intent intentGoToShotInputScreen = new Intent(NewRound.this, ShotInputScreen.class);
             intentGoToShotInputScreen.putExtra("roundID", roundID);
             intentGoToShotInputScreen.putStringArrayListExtra("pinsArray", pins);
@@ -324,6 +297,26 @@ public class NewRound extends BaseActivity implements AdapterView.OnItemSelected
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        GPS.resumeListeners();
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        GPS.removeListeners();
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        handicap = parent.getItemAtPosition(position).toString();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        //put code here.
+    }
 
 }//class
