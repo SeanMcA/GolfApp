@@ -26,14 +26,14 @@ public class ExtractLeagues {
     private static final String TAG_LEAGUE_END_DATE = "finish_date";
     private static final String TAG_LEAGUE_TYPE = "type";
 
-    public static String[] leagueNamesArray;
-    public static Integer[] leagueIDsArray;
-    public static String[] leagueTypeArray;
-    public static String[] leagueStartDateArray;
-    public static String[] leagueEndDateArray;
+    private static String[] leagueNamesArray;
+    private static Integer[] leagueIDsArray;
+    private static String[] leagueTypeArray;
+    private static String[] leagueStartDateArray;
+    private static String[] leagueEndDateArray;
 
-    public static Integer daysLeft;
-    public static String stringDaysLeft;
+    private static Integer daysLeft;
+    private static String stringDaysLeft;
 
 
 

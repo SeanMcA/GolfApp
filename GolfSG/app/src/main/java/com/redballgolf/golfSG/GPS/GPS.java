@@ -13,7 +13,9 @@ import android.util.Log;
 
 
 public class GPS {
-    private Context mContext;
+    private static Context mContext;
+    static LocationManager lm;
+    public static LocationListener locl;
 
     public GPS(Context mContext) {
         this.mContext = mContext;
@@ -25,10 +27,10 @@ public class GPS {
 
 
         // Acquire a reference to the system Location Manager
-        LocationManager locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
+        lm = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
 
         // Define a listener that responds to location updates
-        final LocationListener locationListener = new LocationListener() {
+        locl = new LocationListener() {
 
             public void onLocationChanged(Location location) {
                 makeUseOfNewLocation(location);
@@ -44,7 +46,7 @@ public class GPS {
             }
         };
 
-        LocationManager lm = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
+        lm = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -55,8 +57,8 @@ public class GPS {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locl);
+        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locl);
     }//onCreate
 
     private void makeUseOfNewLocation(Location loc) {
@@ -67,5 +69,19 @@ public class GPS {
         Coordinates.setLatitude(loc.getLatitude());
         Coordinates.setLongitude(loc.getLongitude());
         Coordinates.setAccuracy(loc.getAccuracy());
+    }
+
+    public static void resumeListeners(){
+                if (ContextCompat.checkSelfPermission(mContext, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locl);
+            lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locl);
+        }
+    }
+
+    public static void removeListeners(){
+        Log.i("TAG", "GPS - removeListeners started");
+        if ( ContextCompat.checkSelfPermission(mContext, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ) {
+            lm.removeUpdates(locl);
+        }
     }
 }//class

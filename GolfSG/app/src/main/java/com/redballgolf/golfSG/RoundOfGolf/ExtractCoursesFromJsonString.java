@@ -1,11 +1,6 @@
 package com.redballgolf.golfSG.RoundOfGolf;
 
-import android.content.Context;
 import android.util.Log;
-import android.widget.ListAdapter;
-import android.widget.SimpleAdapter;
-
-import com.redballgolf.golfSG.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,7 +13,7 @@ import java.util.HashMap;
 
 public class ExtractCoursesFromJsonString {
 
-    public static ArrayList<HashMap<String, String>> CourseList;
+    public static ArrayList<HashMap<String, String>> CourseListForListView;
     private static final String TAG_COURSE_INFO = "course_info";
     private static final String TAG_FACILITY_NAME = "facility_name";
     private static final String TAG_COURSE_NAME = "name";
@@ -29,58 +24,76 @@ public class ExtractCoursesFromJsonString {
     private static String[] courseNamesArray;
     private static String[] coursePinsArray;
 
-    private static String courseID;
-    private static String coursePin;
-
-    public static ArrayList<HashMap<String, String>> getCourses(String json) {
+    public static ArrayList<HashMap<String, String>> getCoursesFromJsonString(String json) {
         if (json != null) {
             try {
-                // Hashmap for ListView
-                CourseList = new ArrayList<>();
-
-                JSONObject jsonObj = new JSONObject(json);
-
-                // Getting JSON Array node
-                JSONArray courses = jsonObj.getJSONArray(TAG_COURSE_INFO);
-
-                //initialise arrays
-                courseIDsArray = new String[courses.length()];
-                courseNamesArray = new String[courses.length()];
-                coursePinsArray = new String[36];
-
-                // looping through All courses
-                for (int i = 0; i < courses.length(); i++) {
-                    //Log.i(TAG, "courses length is: " + courses.length());
-                    JSONObject c = courses.getJSONObject(i);
-
-                    String courseFacilityName = c.getString(TAG_FACILITY_NAME);
-                    String courseName = c.getString(TAG_COURSE_NAME);
-                    courseID = c.getString(TAG_COURSE_ID);
-                    coursePin = c.getString(TAG_COURSE_PINS);
-
-                    // tmp hashmap for single course
-                    HashMap<String, String> course = new HashMap<>();
-
-                    // adding each child node to HashMap key => value
-                    course.put(TAG_FACILITY_NAME, courseFacilityName);
-                    course.put(TAG_COURSE_NAME, courseName);
-                    course.put(TAG_COURSE_ID,courseID);
-
-
-                    courseIDsArray[i] = courseID;
-                    courseNamesArray[i] = courseName;
-                    coursePinsArray[i] = coursePin;
-                    // adding course to courses list
-                    CourseList.add(course);
-                }
+                extractData(json);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         } else {
             Log.i("TAG", " Couldn't get any data from the url");
         }
-        Log.i("TAG", "Extract - start adapter");
-        return CourseList;
-    }//ParsonJson
+        //Log.i("TAG", "Extract - start adapter");
+        return CourseListForListView;
+    }
 
-}
+
+    private static ArrayList extractData(String json) throws JSONException {
+        //ArrayList of HashMaps for Courses listView. Each Hashmap is a row in the Courses listview.
+        //The Hashmap contains the key - value pairs of:
+        //course name - course name
+        //courseID - courseID
+        //coursePins - coursePins
+        CourseListForListView = new ArrayList<HashMap<String, String>>();
+        JSONObject jsonObj = new JSONObject(json);
+
+        // Getting JSON data where the start tag is 'TAG_COURSE_INFO'
+        JSONArray courses = jsonObj.getJSONArray(TAG_COURSE_INFO);
+
+        //initialise arrays.
+        //Data is put into arrays as well as the ArrayList 'CourseListForListView'.
+        //The CourseListForListView is to display data in the ListView on screen
+        //but the arrays are used when a user selects one of the items in the ListView.
+        courseIDsArray = new String[courses.length()];
+        courseNamesArray = new String[courses.length()];
+        coursePinsArray = new String[36];
+
+        // looping through All courses and get required data.
+        for (int i = 0; i < courses.length(); i++) {
+            JSONObject jsonObjectOfCourses = courses.getJSONObject(i);
+            String courseFacilityName = jsonObjectOfCourses.getString(TAG_FACILITY_NAME);
+            String courseName = jsonObjectOfCourses.getString(TAG_COURSE_NAME);
+            String courseID = jsonObjectOfCourses.getString(TAG_COURSE_ID);
+            String coursePin = jsonObjectOfCourses.getString(TAG_COURSE_PINS);
+
+            //Hashmap to hold data for single course.
+            HashMap<String, String> course = new HashMap<>();
+
+            // Add the data for each course to the  'course' HashMap. course.put(key, value)
+            course.put(TAG_FACILITY_NAME, courseFacilityName);
+            course.put(TAG_COURSE_NAME, courseName);
+            course.put(TAG_COURSE_ID, courseID);
+
+            // Put the same data into the arrays.
+            courseIDsArray[i] = courseID;
+            courseNamesArray[i] = courseName;
+            coursePinsArray[i] = coursePin;
+            // Add the 'course' HashMap to the 'CourseListForListView' ArrayList.
+            CourseListForListView.add(course);
+        }
+        return CourseListForListView;
+    }
+
+    public static String[] getCoursePinsArray() {
+        return coursePinsArray;
+    }
+
+    public static String[] getCourseIDsArray() {
+        return courseIDsArray;
+    }
+
+    public static String[] getCourseNamesArray() {
+        return courseNamesArray;
+    }
+}//class

@@ -4,7 +4,7 @@ package com.redballgolf.golfSG.RoundOfGolf;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
@@ -12,7 +12,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -29,19 +29,17 @@ import com.redballgolf.golfSG.Common.BaseActivity;
 import com.redballgolf.golfSG.Common.GetDate;
 import com.redballgolf.golfSG.Common.ToastMessage;
 import com.redballgolf.golfSG.GPS.Coordinates;
+import com.redballgolf.golfSG.GPS.GPS;
 import com.redballgolf.golfSG.R;
 import com.redballgolf.golfSG.SQLite.DatabaseHelper;
 import com.redballgolf.golfSG.SharedPreferences.Preferences;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
 public class NewRound extends BaseActivity implements AdapterView.OnItemSelectedListener {
-    ArrayList<HashMap<String, String>> CourseList;
-    public static ListAdapter adapter;
     ArrayList<HashMap<String, String>> mylistOfCourses;
     Context context;
     TextView info;
@@ -52,11 +50,7 @@ public class NewRound extends BaseActivity implements AdapterView.OnItemSelected
     public static int roundID;
     private static String handicap;
     private static String courseID;
-    public static String no = "no";
     private static String selectedCourseName;
-    public static String[] courseIDsArray;
-    public static String[] courseNamesArray;
-    public static String[] coursePinsArray;
     public static ArrayList<String> pins;
     TextView selected_course;
     private Vibrator vibe;
@@ -121,7 +115,7 @@ public class NewRound extends BaseActivity implements AdapterView.OnItemSelected
         today2 = GetDate.todaysDateInSimpleFormat();
         vibe = (Vibrator) NewRound.this.getSystemService(Context.VIBRATOR_SERVICE);
 
-        ToastMessage.displayLongToastMessage(context, "Please wait while we find Golf Courses in your location.");
+        //ToastMessage.displayLongToastMessage(context, "Please wait while we find Golf Courses in your location.");
 
         if(Coordinates.getAccuracy() <= 500){
             new RetrieveListOfCourses().execute();
@@ -131,14 +125,14 @@ public class NewRound extends BaseActivity implements AdapterView.OnItemSelected
 
 
     private class RetrieveListOfCourses extends AsyncTask<Void, Void, Void>{
-        ArrayList<HashMap<String, String>> CourseList;
+        //ArrayList<HashMap<String, String>> CourseListForListView;
         ProgressDialog pDialog;
 
         @Override
         protected void onPreExecute(){
             Log.i("TAG", "GetListOfCourses started");
             pDialog = new ProgressDialog(context);
-            pDialog.setMessage("Please wait...");
+            pDialog.setMessage("Please wait while we retrieve courses in your location...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -149,17 +143,11 @@ public class NewRound extends BaseActivity implements AdapterView.OnItemSelected
                     + Coordinates.getLatitude() + "&longitude=" + Coordinates.getLongitude();
             GetListOfCourses listOfCourses = new GetListOfCourses();
             jsonData = listOfCourses.retrieveCourses(url);
-            mylistOfCourses = ExtractCoursesFromJsonString.getCourses(jsonData);
+            mylistOfCourses = ExtractCoursesFromJsonString.getCoursesFromJsonString(jsonData);
             return null;
         }
 
-        /**
-         * After the json data is returened and Parsed. If there is any data in the leagueList ArrayList then
-         * this means that leagues were returned.
-         * The leagues are displayed and if the user is not part of any leagues then the user
-         * is sent back to the AfterLoginGuest page.
-         * @param result The Parsed json data.
-         */
+
         @Override
         protected void onPostExecute(Void result) {
             Log.i(TAG, "onPostExecute Json String: " + jsonData);
@@ -168,16 +156,13 @@ public class NewRound extends BaseActivity implements AdapterView.OnItemSelected
             super.onPostExecute(result);
             //listview = (ListView) findViewById(R.id.list);
             // Dismiss the progress dialog
-            if (pDialog.isShowing())
+            if (pDialog.isShowing()) {
                 pDialog.dismiss();
+            }
 
-
-            //If leagueList is not null the user is a memeber of at least one league.
-            //If it is null then they are not a member of any leagues.
             if (mylistOfCourses != null) {
-                /**
-                 * Updating parsed JSON data into ListView
-                 * */
+                 //Display the parsed JSON data in the ListView
+
                 ListAdapter adapter = new SimpleAdapter(
                         NewRound.this, mylistOfCourses,
                         R.layout.course_list_layout, new String[]{TAG_FACILITY_NAME, TAG_COURSE_NAME}, new int[]{R.id.facility_name, R.id.course_name}); //The new String above says which info goes in which TextView
@@ -190,89 +175,52 @@ public class NewRound extends BaseActivity implements AdapterView.OnItemSelected
                                             int position, long id) {
                         //Log.i(TAG, "League id from array is: " + leagueIDsArray[position]);
 
-//                        Intent intentIndividualLeagues = new Intent(ListOfLeagues.this, IndividualLeague.class);
-//                        intentIndividualLeagues.putExtra("leagueID", leagueIDsArray[position]);
-//                        intentIndividualLeagues.putExtra("leagueType", leagueTypeArray[position]);
-//                        intentIndividualLeagues.putExtra("leagueStartDate", leagueStartDateArray[position]);
-//                        intentIndividualLeagues.putExtra("leagueEndDate", leagueEndDateArray[position]);
-//                        intentIndividualLeagues.putExtra("leagueName", leagueNamesArray[position]);
-                        //Log.i(TAG, "Sending LeagueId: " + leagueIDsArray[position]);
-                        //Log.i(TAG, "Sending LeagueTYPE: " + leagueTypeArray[position]);
-                        //startActivity(intentIndividualLeagues);
-
+                        Log.i(TAG, "Course ID: " + ExtractCoursesFromJsonString.getCourseIDsArray()[position]);
+                        courseID = ExtractCoursesFromJsonString.getCourseIDsArray()[position];
+                        selectedCourseName = ExtractCoursesFromJsonString.getCourseNamesArray()[position];
+                        selected_course.setText("" + selectedCourseName);
+                        vibe.vibrate(300);
+                        Preferences.insert("courseID", courseID, context);
                     }//onItemClick
                 });
             }
             else
             {
-                Toast toast= Toast.makeText(getApplicationContext(),
-                        "You are not a member of any leagues yet.", Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.TOP|Gravity.CENTER, 0, 150);
-                toast.show();
+                ToastMessage.displayLongToastMessage(context, "Could not find any Courses.");
             }
-
         }//onPostExecute
+
+
+
 
     }//Retrieve class
 
 
-    private void myAdapter(){
-        adapter = new SimpleAdapter(
-                NewRound.this, ExtractCoursesFromJsonString.CourseList,
-                R.layout.course_list_layout, new String[]{FACILITY_NAME, COURSE_NAME}, new int[]{R.id.facility_name, R.id.course_name});
-        //The new String above says which info goes in which TextView
-        // Calling async task to get json
-    }
+
+
 
     @Override
     protected void onResume() {
         super.onResume();
-//        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-//            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mLocationListener);
-//            mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, mLocationListener);
-//        }
-    }//onResume
-
+        GPS.resumeListeners();
+    }
 
     @Override
     protected void onPause() {
         super.onPause();
-//        if ( ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ) {
-//            mLocationManager.removeUpdates(mLocationListener);
-//        }
-    }//onPause
+        GPS.removeListeners();
+    }
 
-
-
-    /**
-     * Spinner select
-     * @param parent The parent view
-     * @param view The view selected
-     * @param position the position of the handicap clicked
-     * @param id The id of the handicap clicked
-     */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        // On selecting a spinner handicap
         handicap = parent.getItemAtPosition(position).toString();
-
-        // Showing selected spinner handicap
-        //Log.i(TAG, "Selected handicap is: " + handicap);
-        //Toast.makeText(parent.getContext(), "Selected: " + handicap, Toast.LENGTH_LONG).show();
-    }
-    public void onNothingSelected(AdapterView<?> arg0) {
-
     }
 
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        //put code here.
+    }
 
-
-
-    /**
-     * This method gets the current date and time as well as the name of the course
-     * that the user input. It send this data to the addNewRoundToDB method
-     * in the DatabaseHelper class. The getRound method is then called.
-     * @param view The view that was clicked
-     */
     public void putInfoInDB(View view){
         today = GetDate.todaysDate();
         String handicap = NewRound.handicap;
@@ -282,9 +230,6 @@ public class NewRound extends BaseActivity implements AdapterView.OnItemSelected
 
         getRoundID();
     }
-
-
-
 
     /**
      * This method is used to get the id of the round just created. This id will be
@@ -318,9 +263,6 @@ public class NewRound extends BaseActivity implements AdapterView.OnItemSelected
             intentGoToShotInputScreen.putExtra("roundID", roundID);
             intentGoToShotInputScreen.putStringArrayListExtra("pinsArray", pins);
             startActivity(intentGoToShotInputScreen);
-
-
-
     }//getRoundID
 
 
