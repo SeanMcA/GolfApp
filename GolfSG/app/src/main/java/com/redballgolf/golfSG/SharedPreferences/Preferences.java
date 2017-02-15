@@ -39,6 +39,16 @@ public class Preferences {
         return data;
     }
 
+    public static int getPreferencesInt(Context context, String key){
+        final int DEFAULT_VALUE = 0;
+        //Log.i("TAG", "Preferences class - get: " + key);
+        //SharedPreferences sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        int data = sharedPreferences.getInt(key, DEFAULT_VALUE);
+        //Log.i("TAG", "Preferences class - get - returns: " + data);
+        return data;
+    }
+
     public static void removeFromPreferences(Context context, String key){
         //Log.i("TAG", "Preferences class - remove: " + key);
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);

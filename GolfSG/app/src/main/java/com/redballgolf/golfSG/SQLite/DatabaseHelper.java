@@ -177,7 +177,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     public void addShotToDB(Double latitude_coord, Double longitude_coord, String place, int hole_counter, int shot_counter, int roundID) {
-        Log.i(TAG, "addShotToDB started");
+        Log.i("TAG", "addShotToDB started");
         ContentValues values = new ContentValues();
         values.put(COLUMN_LATITUDE, latitude_coord);
         values.put(COLUMN_LONGITUDE, longitude_coord);
@@ -258,7 +258,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     public void addScoresToDb(Integer roundId, Double drivingRating, Double longGameRating, Double puttingRating, Double shortGameRating, Integer awfulShots){
-        Log.i(TAG, "addScoresToDb started");
+        Log.i("TAG", "addScoresToDb started");
         ContentValues values = new ContentValues();
         values.put(COLUMN_SG_DRIVING, drivingRating);
         values.put(COLUMN_SG_LONG, longGameRating);

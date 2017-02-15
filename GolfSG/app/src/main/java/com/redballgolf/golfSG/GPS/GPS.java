@@ -11,8 +11,13 @@ import android.support.v4.content.ContextCompat;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.redballgolf.golfSG.ObserverSubject.Observer;
+import com.redballgolf.golfSG.ObserverSubject.Subject;
 
-public class GPS {
+import java.util.ArrayList;
+
+
+public class GPS{
     private static Context mContext;
     static LocationManager lm;
     public static LocationListener locl;
@@ -57,7 +62,7 @@ public class GPS {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locl);
+        //lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locl);
         lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locl);
     }//onCreate
 
@@ -74,7 +79,7 @@ public class GPS {
     public static void resumeListeners(){
                 if (ContextCompat.checkSelfPermission(mContext, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locl);
-            lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locl);
+            //lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locl);
         }
     }
 
@@ -84,4 +89,6 @@ public class GPS {
             lm.removeUpdates(locl);
         }
     }
+
+
 }//class

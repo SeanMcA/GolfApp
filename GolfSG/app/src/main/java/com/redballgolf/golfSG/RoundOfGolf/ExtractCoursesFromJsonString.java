@@ -22,7 +22,7 @@ public class ExtractCoursesFromJsonString {
 
     private static String[] courseIDsArray;
     private static String[] courseNamesArray;
-    private static String[] coursePinsArray;
+    private static double[] coursePinsArray;
 
     public static ArrayList<HashMap<String, String>> getCoursesFromJsonString(String json) {
         if (json != null) {
@@ -57,7 +57,7 @@ public class ExtractCoursesFromJsonString {
         //but the arrays are used when a user selects one of the items in the ListView.
         courseIDsArray = new String[courses.length()];
         courseNamesArray = new String[courses.length()];
-        coursePinsArray = new String[36];
+        coursePinsArray = new double[36];
 
         // looping through All courses and get required data.
         for (int i = 0; i < courses.length(); i++) {
@@ -78,14 +78,14 @@ public class ExtractCoursesFromJsonString {
             // Put the same data into the arrays.
             courseIDsArray[i] = courseID;
             courseNamesArray[i] = courseName;
-            coursePinsArray[i] = coursePin;
+            coursePinsArray[i] = Double.valueOf(coursePin);
             // Add the 'course' HashMap to the 'CourseListForListView' ArrayList.
             CourseListForListView.add(course);
         }
         return CourseListForListView;
     }
 
-    public static String[] getCoursePinsArray() {
+    public static double[] getCoursePinsArray() {
         return coursePinsArray;
     }
 

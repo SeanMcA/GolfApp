@@ -144,7 +144,7 @@ public class NewRound extends BaseActivity implements AdapterView.OnItemSelected
             Log.i(TAG, "onPostExecute Json String: " + jsonData);
             displayCoursesInListView(pDialog);//
         }
-    }
+    }//class
 
 
     private void getCoursesListFromServer(){
@@ -211,30 +211,17 @@ public class NewRound extends BaseActivity implements AdapterView.OnItemSelected
             Log.i(TAG, "getRoundID - started");
             DatabaseHelper dbHandler = new DatabaseHelper(NewRound.this);
             roundID = dbHandler.getRoundID(today);
-
-
-//            SQLiteOpenHelper myDatabaseHelper = new DatabaseHelper(this);
-//            //We don’t need to write to the database so we’re using getReadableDatabase().
-//            SQLiteDatabase db = myDatabaseHelper.getReadableDatabase();
-//            //Use cursor to get number of rows where hole_counter equals X
-//            String query1 = "SELECT _id FROM round WHERE date = '" + today + "';";
-//            Cursor cursor = db.rawQuery(query1, null);
-//            if (cursor.moveToFirst()) {
-//                roundID = cursor.getInt(0);
-//                Log.i(TAG, "roundId is: " + roundID);
-//            }
-//            cursor.close();
         }//try
         catch (SQLiteException e) {
             Toast toast = Toast.makeText(this, "Database unavailable", Toast.LENGTH_SHORT);
             toast.show();
         }
+
             Preferences.insertInt("roundID", roundID, this);
-            Round round = new Round();
-            Hole hole = new Hole(roundID, round);
+            Round round = new Round(roundID);
             Intent intentGoToShotInputScreen = new Intent(NewRound.this, ShotInputScreen.class);
             intentGoToShotInputScreen.putExtra("roundID", roundID);
-            intentGoToShotInputScreen.putStringArrayListExtra("pinsArray", pins);
+            //intentGoToShotInputScreen.putStringArrayListExtra("pinsArray", pins);
             startActivity(intentGoToShotInputScreen);
     }//getRoundID
 

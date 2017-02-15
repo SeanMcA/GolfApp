@@ -1,7 +1,10 @@
 package com.redballgolf.golfSG.RoundOfGolf;
 
 
+import android.content.Context;
+
 import com.redballgolf.golfSG.GPS.Coordinates;
+import com.redballgolf.golfSG.SQLite.DatabaseHelper;
 
 public class Shot {
     private double shotLatitude;
@@ -10,6 +13,7 @@ public class Shot {
     private double distanceOfShot;
     private double shotDifficultyRating;
     private double shotScore;
+    private static int shotNumber;
     private Hole hole;
 
     public Shot(Hole hole) {
@@ -66,5 +70,18 @@ public class Shot {
 
     public void setShotScore(double shotScore) {
         this.shotScore = shotScore;
+    }
+
+    public static int getShotNumber() {
+        return shotNumber;
+    }
+
+    public void setShotCounter(int shotCounter) {
+        this.shotNumber = shotCounter;
+    }
+
+    public void addShotToSqlite(Context context, String place, int roundID){
+        DatabaseHelper dbHandler = new DatabaseHelper(context);
+        dbHandler.addShotToDB(Coordinates.getLatitude(), Coordinates.getLongitude(), place, Hole.getHoleNumber(), getShotNumber(), roundID);
     }
 }
