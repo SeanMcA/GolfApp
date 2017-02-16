@@ -6,18 +6,15 @@ import java.util.List;
 
 public class Hole {
     private List<Shot> shotList = new LinkedList<>();
-    private static int holeNumber;
+    private static int holeNumber = 1;
     private int roundID;
 
-    public Hole(int roundID, Round round) {
-        this.roundID = roundID;
+    public Hole(Round round) {
         this.holeNumber = ShotInputScreen.hole_counter;
         round.addHoleToRoundsHoleList(this);
     }
 
-    public void newShot(){
-        Shot shot = new Shot(this);
-    }
+
 
     public void addShotToHolesShotList(Shot shot){
         shotList.add(shot);

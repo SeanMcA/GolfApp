@@ -4,10 +4,7 @@ package com.redballgolf.golfSG.RoundOfGolf;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -25,6 +22,8 @@ import android.widget.Toast;
 import com.redballgolf.golfSG.Common.BaseActivity;
 import com.redballgolf.golfSG.Common.GetDate;
 import com.redballgolf.golfSG.Common.ToastMessage;
+import com.redballgolf.golfSG.Course.ExtractCoursesFromJsonString;
+import com.redballgolf.golfSG.Course.GetListOfCourses;
 import com.redballgolf.golfSG.GPS.Coordinates;
 import com.redballgolf.golfSG.GPS.GPS;
 import com.redballgolf.golfSG.R;
@@ -48,56 +47,13 @@ public class NewRound extends BaseActivity implements AdapterView.OnItemSelected
     private static String handicap;
     private static String courseID;
     private static String selectedCourseName;
-    public static ArrayList<String> pins;
     TextView selected_course;
     private Vibrator vibe;
 
-
-
-    private static final String TAG = "TEST";
-    public static String LoggedInId;
-
-    private static final String FACILITY_NAME = "facility_name";
-    private static final String COURSE_NAME = "name";
+    private static String LoggedInId;
     private static final String TAG_FACILITY_NAME = "facility_name";
     private static final String TAG_COURSE_NAME = "name";
 
-    public static String  h1lat;
-    public static String  h1long;
-    public static String  h2lat;
-    public static String  h2long;
-    public static String  h3lat;
-    public static String  h3long;
-    public static String  h4lat;
-    public static String  h4long;
-    public static String  h5lat;
-    public static String  h5long;
-    public static String  h6lat;
-    public static String  h6long;
-    public static String  h7lat;
-    public static String  h7long;
-    public static String  h8lat;
-    public static String  h8long;
-    public static String  h9lat;
-    public static String  h9long;
-    public static String  h10lat;
-    public static String  h10long;
-    public static String  h11lat;
-    public static String  h11long;
-    public static String  h12lat;
-    public static String  h12long;
-    public static String  h13lat;
-    public static String  h13long;
-    public static String  h14lat;
-    public static String  h14long;
-    public static String  h15lat;
-    public static String  h15long;
-    public static String  h16lat;
-    public static String  h16long;
-    public static String  h17lat;
-    public static String  h17long;
-    public static String  h18lat;
-    public static String  h18long;
 
 
     @Override
@@ -112,13 +68,11 @@ public class NewRound extends BaseActivity implements AdapterView.OnItemSelected
         today2 = GetDate.todaysDateInSimpleFormat();
         vibe = (Vibrator) NewRound.this.getSystemService(Context.VIBRATOR_SERVICE);
 
-        //ToastMessage.displayLongToastMessage(context, "Please wait while we find Golf Courses in your location.");
-
         if(Coordinates.getAccuracy() <= 500){
             new RetrieveListOfCourses().execute();
         }
         addHandicapChoiceSpinner();
-    }//onCreate
+    }
 
 
     private class RetrieveListOfCourses extends AsyncTask<Void, Void, Void>{
@@ -141,7 +95,7 @@ public class NewRound extends BaseActivity implements AdapterView.OnItemSelected
 
         @Override
         protected void onPostExecute(Void result) {
-            Log.i(TAG, "onPostExecute Json String: " + jsonData);
+            Log.i("TAG", "onPostExecute Json String: " + jsonData);
             displayCoursesInListView(pDialog);//
         }
     }//class
@@ -208,7 +162,7 @@ public class NewRound extends BaseActivity implements AdapterView.OnItemSelected
      */
     public void getRoundID(){
         try {
-            Log.i(TAG, "getRoundID - started");
+            Log.i("TAG", "getRoundID - started");
             DatabaseHelper dbHandler = new DatabaseHelper(NewRound.this);
             roundID = dbHandler.getRoundID(today);
         }//try
@@ -218,7 +172,7 @@ public class NewRound extends BaseActivity implements AdapterView.OnItemSelected
         }
 
             Preferences.insertInt("roundID", roundID, this);
-            Round round = new Round(roundID);
+            Preferences.insertBoolean("isNewRound", true, this);
             Intent intentGoToShotInputScreen = new Intent(NewRound.this, ShotInputScreen.class);
             intentGoToShotInputScreen.putExtra("roundID", roundID);
             //intentGoToShotInputScreen.putStringArrayListExtra("pinsArray", pins);

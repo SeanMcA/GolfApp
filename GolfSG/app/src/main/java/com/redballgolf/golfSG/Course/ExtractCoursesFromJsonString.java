@@ -1,4 +1,4 @@
-package com.redballgolf.golfSG.RoundOfGolf;
+package com.redballgolf.golfSG.Course;
 
 import android.util.Log;
 

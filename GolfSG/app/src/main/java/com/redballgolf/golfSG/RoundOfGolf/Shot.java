@@ -13,11 +13,14 @@ public class Shot {
     private double distanceOfShot;
     private double shotDifficultyRating;
     private double shotScore;
-    private static int shotNumber;
+    private static int shotNumber = 1;
     private Hole hole;
 
-    public Shot(Hole hole) {
+    public Shot(Hole hole, String lie){
         this.hole = hole;
+        this.lie = lie;
+        this.shotLatitude = Coordinates.getLatitude();
+        this.shotLongitude = Coordinates.getLongitude();
     }
 
     public void addShotToHolesShotList(){
@@ -48,19 +51,11 @@ public class Shot {
         return shotScore;
     }
 
-    public void setShotLatitude(double shotLatitude) {
-        this.shotLatitude = shotLatitude;
-    }
-
-    public void setShotLongitude(double shotLongitude) {
-        this.shotLongitude = shotLongitude;
-    }
-
     public void setLie(String lie) {
         this.lie = lie;
     }
 
-       public void setDistanceOfShot(double distanceOfShot) {
+    public void setDistanceOfShot(double distanceOfShot) {
         this.distanceOfShot = distanceOfShot;
     }
 
@@ -76,12 +71,9 @@ public class Shot {
         return shotNumber;
     }
 
-    public void setShotCounter(int shotCounter) {
-        this.shotNumber = shotCounter;
-    }
-
-    public void addShotToSqlite(Context context, String place, int roundID){
+    public void addShotToSqlite(Context context){
         DatabaseHelper dbHandler = new DatabaseHelper(context);
-        dbHandler.addShotToDB(Coordinates.getLatitude(), Coordinates.getLongitude(), place, Hole.getHoleNumber(), getShotNumber(), roundID);
+        dbHandler.addShotToDB(shotLatitude, shotLongitude, lie, Hole.getHoleNumber(), getShotNumber(), Round.getRoundID());
+        shotNumber++;
     }
 }

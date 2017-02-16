@@ -1,6 +1,8 @@
-package com.redballgolf.golfSG.RoundOfGolf;
+package com.redballgolf.golfSG.Course;
 
 
+import com.redballgolf.golfSG.Course.ExtractCoursesFromJsonString;
+import com.redballgolf.golfSG.RoundOfGolf.ShotInputScreen;
 
 public class PinsCoordinates {
     private static double pinLatitude;

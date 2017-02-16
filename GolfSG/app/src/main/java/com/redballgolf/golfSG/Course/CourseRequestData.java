@@ -1,4 +1,4 @@
-package com.redballgolf.golfSG.RoundOfGolf;
+package com.redballgolf.golfSG.Course;
 
 import com.redballgolf.golfSG.GPS.Coordinates;
 

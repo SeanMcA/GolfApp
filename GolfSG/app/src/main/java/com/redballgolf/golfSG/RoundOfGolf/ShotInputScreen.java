@@ -2,14 +2,8 @@ package com.redballgolf.golfSG.RoundOfGolf;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,10 +12,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.redballgolf.golfSG.Common.BaseActivity;
+import com.redballgolf.golfSG.Course.PinsCoordinates;
 import com.redballgolf.golfSG.GPS.Coordinates;
 import com.redballgolf.golfSG.ObserverSubject.Observer;
 import com.redballgolf.golfSG.R;
-import com.redballgolf.golfSG.SQLite.DatabaseHelper;
 import com.redballgolf.golfSG.SharedPreferences.Preferences;
 
 public class ShotInputScreen extends BaseActivity implements Observer{
@@ -29,36 +23,29 @@ public class ShotInputScreen extends BaseActivity implements Observer{
     public static long POLLING_FREQUENCY = 0;//milliseconds.
     private static float MIN_DISTANCE = 1;//meters
 
-    public static int hole_counter;
-    public static int shot_counter = 1;
     public static int roundID;
     private double latitude;
     private double longitude;
     private double accuracy;
     public static String place;
-    private static Button mydriver;
-    private static Button myiron;
-    private static Button fairway;
-    private static Button rough;
-    private static Button trees;
-    private static Button bunker;
-    private static Button penalty;
-    private static Button onGreen;
+    private Button mydriver;
+    private Button myiron;
+    private Button fairway;
+    private Button rough;
+    private Button trees;
+    private Button bunker;
+    private Button penalty;
+    private Button onGreen;
     public static Double distToGreen;
     public static String LoggedInId;
-    public static LocationManager mLocationManager;
-    public static LocationListener mLocationListener;
-    public static final String MyPREFERENCES = "MyPrefs";
-    SharedPreferences sharedpreferences;
     ImageView accuracyView;
     TextView holeNumberTextview;
-
-    private static final String TAG = "TEST";
+    Round round;
+    Hole hole;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //Log.i(TAG, "MAIN - onCreate - started");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shot_input_screen);
 
@@ -67,19 +54,19 @@ public class ShotInputScreen extends BaseActivity implements Observer{
 
         LoggedInId = Preferences.getPreferences(this, "loginID");
         roundID = Preferences.getPreferencesInt(this, "roundID");
-
-        shot_counter = Shot.getShotNumber();
-        //Log.i(TAG, "SIS shot_counter is: " + shot_counter);
-        hole_counter = Hole.getHoleNumber();
-
+        Boolean isNewRound = Preferences.getPreferencesBoolean(this, "isNewRound");
+        if(isNewRound){
+            round = new Round(roundID);
+            hole = new Hole(round);
+            Preferences.insertBoolean("isNewRound", false, this);
+        }
         disableButtonsUntilGpsAccuracyBetterThan3();
 
         accuracyView = (ImageView)findViewById(R.id.gps_image);
         holeNumberTextview = (TextView) findViewById(R.id.hole_number);
-        holeNumberTextview.setText("Hole: " + hole_counter + " - Shot: " + shot_counter);
+        holeNumberTextview.setText("Hole: " + Hole.getHoleNumber() + " - Shot: " + Shot.getShotNumber());
 
         displayDistanceToGreen();
-
     }//onCreate
 
 
@@ -133,13 +120,9 @@ public class ShotInputScreen extends BaseActivity implements Observer{
                     public void onClick(DialogInterface dialog, int id) {
                         //If user clicks 'ok' then run this code to send lat and long
                         //to addProduct method which is located in the DatabaseHelper class.
-                        Shot shot = new Shot();
-                        Shot.addShotToSqlite(this, latitude,longitude, place, roundID);
-                        DatabaseHelper dbHandler = new DatabaseHelper(ShotInputScreen.this);
-
-                        dbHandler.addShotToDB(Coordinates.getLatitude(), Coordinates.getLongitude(), place, hole_counter, shot_counter, roundID);
-                        shot_counter++;
-                        holeNumberTextview.setText("Hole: " + hole_counter + " - Shot: "+ shot_counter);
+                        Shot shot = new Shot(hole, place);
+                        shot.addShotToSqlite(ShotInputScreen.this);
+                        shot.addShotToHolesShotList();
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -181,6 +164,8 @@ public class ShotInputScreen extends BaseActivity implements Observer{
         this.accuracy = accuracy;
         if(accuracy <=5){
             enableButtons(accuracy);
+        }else{
+            disableButtonsUntilGpsAccuracyBetterThan3();
         }
     }
 
