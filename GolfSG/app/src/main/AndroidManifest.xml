@@ -18,7 +18,7 @@
         <activity
             android:name=".Login.LoginRegisterOption"
             android:label="@string/title_activity_login_register_option"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Register.Register"
             android:label="@string/title_activity_register"
@@ -65,7 +65,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".RoundOfGolf.holeSummary"
+            android:label="@string/title_activity_hole_summary"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
-
 
 </manifest>

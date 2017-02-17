@@ -2,6 +2,7 @@ package com.redballgolf.golfSG.RoundOfGolf;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -84,39 +85,14 @@ public class ShotInputScreen extends BaseActivity implements Observer{
      */
     public void buttonOnClick(View view)
     {
-        switch(view.getId())
-        {
-            case R.id.driver:
-                place = "tee_shot_driver";
-                break;
-            case R.id.iron:
-                place = "tee_shot_iron";
-                break;
-            case R.id.fairway:
-                place = "fairway";
-                break;
-            case R.id.right_trees:
-                place = "rightTrees";
-                break;
-            case R.id.right_rough:
-                place = "rightRough";
-                break;
-            case R.id.right_bunker:
-                place = "rightBunker";
-                break;
-            case R.id.green:
-                place = "green";
-                break;
-        }//switch
-
+        place = getClickedButton(view);
 
         //AlertDialog to check if user actually wants to submit shot
         //and its not a case of clicking button by accident.
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Are you sure you want to submit this shot?");
-
-        //builder.setMessage("Some message...")
-        builder.setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setCancelable(false);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         //If user clicks 'ok' then run this code to send lat and long
                         //to addProduct method which is located in the DatabaseHelper class.
@@ -124,13 +100,12 @@ public class ShotInputScreen extends BaseActivity implements Observer{
                         shot.addShotToSqlite(ShotInputScreen.this);
                         shot.addShotToHolesShotList();
                     }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                     }
                 });
-
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
 
@@ -154,6 +129,11 @@ public class ShotInputScreen extends BaseActivity implements Observer{
 //        //Log.i(TAG, "Sending to GREEN sn: " + shot_counter);
 //        startActivity(intentGoToGreenScreen);
 
+    }
+
+    public void endHole(View view){
+        Intent gotToHoleSummary = new Intent(ShotInputScreen.this,HoleSummary.class);
+        startActivity(gotToHoleSummary);
     }
 
     @Override
@@ -207,7 +187,7 @@ public class ShotInputScreen extends BaseActivity implements Observer{
 
     private void disableButtonsUntilGpsAccuracyBetterThan3(){
         accuracyView.setImageResource(R.drawable.gps_red);
-        onGreen = (Button)findViewById(R.id.green);
+        onGreen = (Button)findViewById(R.id.flag);
         onGreen.setEnabled(false);
         onGreen.getBackground().setColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY);
 
@@ -239,5 +219,35 @@ public class ShotInputScreen extends BaseActivity implements Observer{
         bunker.setEnabled(false);
         bunker.getBackground().setColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY);
     }
+
+
+    private String getClickedButton(View view){
+        switch(view.getId())
+        {
+            case R.id.driver:
+                place = "tee_shot_driver";
+                break;
+            case R.id.iron:
+                place = "tee_shot_iron";
+                break;
+            case R.id.fairway:
+                place = "fairway";
+                break;
+            case R.id.right_trees:
+                place = "rightTrees";
+                break;
+            case R.id.right_rough:
+                place = "rightRough";
+                break;
+            case R.id.right_bunker:
+                place = "rightBunker";
+                break;
+            case R.id.flag:
+                place = "green";
+                break;
+        }//switch
+        return place;
+    }
+
 }//class
 

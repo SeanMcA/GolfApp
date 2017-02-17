@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content" />
 
             <Button
-                android:id="@+id/green"
+                android:id="@+id/flag"
                 android:layout_width="0dp"
                 android:layout_weight="0.9"
                 android:layout_height="40dp"
@@ -36,8 +36,8 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:background="#FF99CC00"
-                android:text="On The Green"
-                android:onClick="goToGreen"/>
+                android:text="Flag"
+                android:onClick="endHole"/>
 
         </LinearLayout>
 

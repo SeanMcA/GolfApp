@@ -23,4 +23,5 @@
     <string name="title_activity_new_round">NewRound</string>
     <string name="title_activity_shot_input_screen">ShotInputScreen</string>
     <string name="title_activity_splash_screen">SplashScreen</string>
+    <string name="title_activity_hole_summary">holeSummary</string>
 </resources>
