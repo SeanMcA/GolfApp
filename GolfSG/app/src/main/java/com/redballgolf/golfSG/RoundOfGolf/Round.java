@@ -1,12 +1,13 @@
 package com.redballgolf.golfSG.RoundOfGolf;
 
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Round {
     private int playerID;
-    private List<Hole> holeList = new LinkedList<>();
+    private List holeList = new LinkedList<>();
     private static int roundID;
 
     public Round(int roundID){

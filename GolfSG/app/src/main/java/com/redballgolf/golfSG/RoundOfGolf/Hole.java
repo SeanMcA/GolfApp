@@ -1,12 +1,14 @@
 package com.redballgolf.golfSG.RoundOfGolf;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Hole {
-    private static List<Shot> shotList = new LinkedList<>();
+public class Hole implements Parcelable{
+    private List<Shot> shotList;
     private static int holeNumber = 1;
     private int roundID;
 
@@ -14,6 +16,35 @@ public class Hole {
         round.addHoleToRoundsHoleList(this);
     }
 
+
+    protected Hole(Parcel in) {
+        roundID = in.readInt();
+        this.shotList = new LinkedList<>();
+        in.readList(shotList, List.class.getClassLoader() );
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(roundID);
+        dest.writeList(shotList);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Hole> CREATOR = new Creator<Hole>() {
+        @Override
+        public Hole createFromParcel(Parcel in) {
+            return new Hole(in);
+        }
+
+        @Override
+        public Hole[] newArray(int size) {
+            return new Hole[size];
+        }
+    };
 
     public void addShotToHolesShotList(Shot shot) {
         shotList.add(shot);
@@ -32,9 +63,8 @@ public class Hole {
     }
 
 
-    public static ArrayList getHoleSummary() {
+    public ArrayList getHoleSummary() {
         ArrayList holeSummary = new ArrayList();
-        //This can be changed to iterate through List and get data.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         Iterator listIterator = shotList.listIterator();
         while (listIterator.hasNext()) {
             String lie = (((Shot) listIterator.next()).getLie());
@@ -79,4 +109,6 @@ public class Hole {
 //        cursor.close();
 //        return data;
     }
+
+
 }

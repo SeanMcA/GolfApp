@@ -65,7 +65,7 @@ public class ShotInputScreen extends BaseActivity implements Observer{
 
         accuracyView = (ImageView)findViewById(R.id.gps_image);
         holeNumberTextview = (TextView) findViewById(R.id.hole_number);
-        holeNumberTextview.setText("Hole: " + Hole.getHoleNumber() + " - Shot: " + Shot.getShotNumber());
+        holeNumberTextview.setText("Hole: " + hole.getHoleNumber() + " - Shot: " + Shot.getShotNumber());
 
         displayDistanceToGreen();
     }//onCreate
@@ -132,8 +132,12 @@ public class ShotInputScreen extends BaseActivity implements Observer{
     }
 
     public void endHole(View view){
-        Intent gotToHoleSummary = new Intent(ShotInputScreen.this,HoleSummary.class);
-        startActivity(gotToHoleSummary);
+        Intent intent = new Intent(ShotInputScreen.this, HoleSummary.class);
+        intent.putExtra("Hole", hole);
+        startActivity(intent);
+//        HoleSummaryData hsd = new HoleSummaryData(this);
+//        hsd.getSummaryDataForHole(hole);
+
     }
 
     @Override

@@ -68,6 +68,10 @@
         <activity
             android:name=".RoundOfGolf.holeSummary"
             android:label="@string/title_activity_hole_summary"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".RoundOfGolf.RoundSummary"
+            android:label="@string/title_activity_round_summary"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
