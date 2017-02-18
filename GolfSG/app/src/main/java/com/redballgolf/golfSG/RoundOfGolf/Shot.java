@@ -2,7 +2,6 @@ package com.redballgolf.golfSG.RoundOfGolf;
 
 
 import android.content.Context;
-
 import com.redballgolf.golfSG.GPS.Coordinates;
 import com.redballgolf.golfSG.SQLite.DatabaseHelper;
 
