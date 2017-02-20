@@ -2,6 +2,7 @@ package com.redballgolf.golfSG.Course;
 
 
 import com.redballgolf.golfSG.Course.ExtractCoursesFromJsonString;
+import com.redballgolf.golfSG.RoundOfGolf.Hole;
 import com.redballgolf.golfSG.RoundOfGolf.ShotInputScreen;
 
 public class PinsCoordinates {
@@ -12,9 +13,9 @@ public class PinsCoordinates {
 
 
     public void getCoordinates(){
-        int hole_counter = ShotInputScreen.hole_counter;
-        this.pinLatitude = pinsArray[hole_counter * hole_counter -2];
-        this.pinLongitude = pinsArray[hole_counter * hole_counter -1];
+        int hole_counter = Hole.getHoleNumber();
+        this.pinLatitude = pinsArray[hole_counter * 2 -2];
+        this.pinLongitude = pinsArray[hole_counter * 2 -1];
     }
 
     public static double getPinLatitude() {

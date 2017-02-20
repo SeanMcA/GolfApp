@@ -1,11 +1,8 @@
 package com.redballgolf.golfSG.RoundOfGolf;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteException;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TableLayout;
@@ -14,13 +11,14 @@ import android.widget.TextView;
 
 import com.redballgolf.golfSG.Common.BaseActivity;
 import com.redballgolf.golfSG.R;
-import com.redballgolf.golfSG.SQLite.DatabaseHelper;
 
 import java.util.ArrayList;
 
 public class HoleSummary extends BaseActivity {
     private String hit_from;
     private String shot_score;
+    static TableLayout tableLayout;
+    private Hole hole;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,12 +29,15 @@ public class HoleSummary extends BaseActivity {
         TextView holeSummaryHeader = (TextView) findViewById(R.id.hole_summary_header);
         holeSummaryHeader.setText("Hole " + Hole.getHoleNumber());
 
+        Intent intent = getIntent();
+        hole = intent.getExtras().getParcelable("Hole");
 
-        TableLayout tableLayout = (TableLayout) findViewById(R.id.tablelayout);
+        tableLayout = (TableLayout) findViewById(R.id.tablelayout);
         TableRow rowHeader = getRowHeaders();
         tableLayout.addView(rowHeader);
-        getSummaryDataForHole(tableLayout);
+        getSummaryDataForHoleAndDisplay(tableLayout);
     }//onCreate
+
 
     private TableRow getRowHeaders() {
         TableRow rowHeader = new TableRow(this);
@@ -61,8 +62,8 @@ public class HoleSummary extends BaseActivity {
         return rowHeader;
     }
 
-    private void getSummaryDataForHole(TableLayout tableLayout){
-        ArrayList <String> holeSummaryData = Hole.getHoleSummary();
+    private void getSummaryDataForHoleAndDisplay(TableLayout tableLayout){
+        ArrayList <String> holeSummaryData = hole.getHoleSummary();
         int numberOfShots = holeSummaryData.size();
         for(int i = 0; i < numberOfShots; i = i + 2) {
             hit_from = holeSummaryData.get(i);
@@ -71,7 +72,7 @@ public class HoleSummary extends BaseActivity {
         }
     }
 
-    private void displaySummaryDataInTable(TableLayout tableLayout, String hit_from, String shot_score){
+    public void displaySummaryDataInTable( TableLayout tableLayout, String hit_from, String shot_score){
         // data rows
         TableRow row = new TableRow(this);
         row.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT,
@@ -98,10 +99,10 @@ public class HoleSummary extends BaseActivity {
     }
 
     public void endRound(View view){
-//        Log.i(TAG, "end round started**");
-//        Intent intentGetRoundSummary = new Intent(HoleSummary.this, RoundSummary.class);
-//        intentGetRoundSummary.putExtra("roundID", roundID);
-//        startActivity(intentGetRoundSummary);
+        Intent intentRoundSummary = new Intent(HoleSummary.this, RoundSummary.class);
+        intentRoundSummary.putExtra("roundID", Round.getRoundID());
+        intentRoundSummary.putExtra("Hole", hole);
+        startActivity(intentRoundSummary);
     }
 
 }//class
