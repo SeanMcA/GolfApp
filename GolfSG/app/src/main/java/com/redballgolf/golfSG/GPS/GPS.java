@@ -21,6 +21,7 @@ public class GPS{
     private static Context mContext;
     static LocationManager lm;
     public static LocationListener locl;
+    Coordinates coordinates = new Coordinates();
 
     public GPS(Context mContext) {
         this.mContext = mContext;
@@ -71,9 +72,7 @@ public class GPS{
         Log.i("TAG", "Latitude is: " + loc.getLatitude());
         Log.i("TAG", "Longitude is: " + loc.getLongitude());
         Log.i("TAG", "Accuracy is:" + loc.getAccuracy());
-        Coordinates.setLatitude(loc.getLatitude());
-        Coordinates.setLongitude(loc.getLongitude());
-        Coordinates.setAccuracy(loc.getAccuracy());
+        coordinates.setCoordinates(loc.getLatitude(), loc.getLongitude(), loc.getAccuracy());
     }
 
     public static void resumeListeners(){

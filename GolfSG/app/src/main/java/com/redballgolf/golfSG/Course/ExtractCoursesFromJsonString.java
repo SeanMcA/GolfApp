@@ -78,20 +78,24 @@ public class ExtractCoursesFromJsonString {
             // Put the same data into the arrays.
             courseIDsArray[i] = courseID;
             courseNamesArray[i] = courseName;
-            coursePinsArray[i] = Double.valueOf(coursePin);
+            //coursePinsArray[i] = Double.valueOf(coursePin);//UNCOMMENT FOR REAL USE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
             // Add the 'course' HashMap to the 'CourseListForListView' ArrayList.
             CourseListForListView.add(course);
         }
         return CourseListForListView;
     }
 
+//    public static double[] getCoursePinsArray() {//UNCOMMENT THIS AS WELL!!!!!!!!!!!!!!!!!!!!
+//        return coursePinsArray;
+//    }
+
     public static double[] getCoursePinsArray() {
-        return coursePinsArray;
+        return PinsArrayTest.getPinsArrayTest();
     }
 
-    public static String[] getCourseIDsArray() {
-        return courseIDsArray;
-    }
+    public static String[] getCourseIDsArray() { return courseIDsArray;    }
 
     public static String[] getCourseNamesArray() {
         return courseNamesArray;

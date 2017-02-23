@@ -7,10 +7,11 @@ import java.util.List;
 
 public class Round {
     private int playerID;
-    private List holeList = new LinkedList<>();
+    private List holeList;
     private static int roundID;
 
     public Round(int roundID){
+        holeList = new LinkedList<>();
         this.roundID = roundID;
     }
 

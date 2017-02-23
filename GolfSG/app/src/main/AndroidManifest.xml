@@ -30,6 +30,7 @@
         <activity
             android:name=".leagues.LeaguesMenu"
             android:label="@string/title_activity_leagues_menu"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Login.Login"
@@ -46,6 +47,7 @@
         <activity
             android:name=".Common.BaseActivity"
             android:label="@string/title_activity_base"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".RoundOfGolf.NewRound"
@@ -54,6 +56,7 @@
         <activity
             android:name=".RoundOfGolf.ShotInputScreen"
             android:label="@string/title_activity_shot_input_screen"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Common.SplashScreen"
@@ -72,6 +75,10 @@
         <activity
             android:name=".RoundOfGolf.RoundSummary"
             android:label="@string/title_activity_round_summary"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".RoundOfGolf.OnTheGreen"
+            android:label="@string/title_activity_on_the_green"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

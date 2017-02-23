@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import com.redballgolf.golfSG.GPS.GPS;
+import com.redballgolf.golfSG.Login.AfterLogin;
 import com.redballgolf.golfSG.Login.LoginRegisterOption;
 import com.redballgolf.golfSG.R;
+import com.redballgolf.golfSG.SharedPreferences.Preferences;
 
 public class SplashScreen extends Activity {
 
@@ -18,6 +20,7 @@ public class SplashScreen extends Activity {
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.activity_splash_screen);
+        final String LoggedInId = Preferences.getPreferences(this, "loginID");
 
         GPS gps = new GPS(this);
 
@@ -27,9 +30,15 @@ public class SplashScreen extends Activity {
             @Override
             public void run() {
                 /* Create an Intent that will start the LoginRegister-Activity. */
-                Intent mainIntent = new Intent(SplashScreen.this, LoginRegisterOption.class);
-                SplashScreen.this.startActivity(mainIntent);
-                SplashScreen.this.finish();
+                if (LoggedInId.equals("0")) {
+                        Intent mainIntent = new Intent(SplashScreen.this, LoginRegisterOption.class);
+                        SplashScreen.this.startActivity(mainIntent);
+                        SplashScreen.this.finish();
+                    }else{
+                    Intent mainIntent = new Intent(SplashScreen.this, AfterLogin.class);
+                    SplashScreen.this.startActivity(mainIntent);
+                    SplashScreen.this.finish();
+                }
             }
         }, SPLASH_DISPLAY_LENGTH);
     }

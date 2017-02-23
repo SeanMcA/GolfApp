@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -98,14 +99,16 @@ public class NewRound extends BaseActivity implements AdapterView.OnItemSelected
             Log.i("TAG", "onPostExecute Json String: " + jsonData);
             displayCoursesInListView(pDialog);//
         }
-    }//class
+    }
 
 
     private void getCoursesListFromServer(){
         String url = "http://zelusit.com/androidGetCourses.php?latitude="
                 + Coordinates.getLatitude() + "&longitude=" + Coordinates.getLongitude();
+        Log.i("TAG","Course list url: " +url);
         GetListOfCourses listOfCourses = new GetListOfCourses();
         jsonData = listOfCourses.retrieveCourses(url);
+        Log.i("TAG", "jsonData returned is: " + jsonData);
         mylistOfCourses = ExtractCoursesFromJsonString.getCoursesFromJsonString(jsonData);
     }
 
@@ -115,7 +118,7 @@ public class NewRound extends BaseActivity implements AdapterView.OnItemSelected
             pDialog.dismiss();
         }
 
-        if (mylistOfCourses != null) {
+        if(mylistOfCourses != null) {
 
             ListAdapter adapter = new SimpleAdapter(
                     NewRound.this, mylistOfCourses,
@@ -127,8 +130,6 @@ public class NewRound extends BaseActivity implements AdapterView.OnItemSelected
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view,
                                         int position, long id) {
-
-                    //Log.i(TAG, "Course ID: " + ExtractCoursesFromJsonString.getCourseIDsArray()[position]);
                     courseID = ExtractCoursesFromJsonString.getCourseIDsArray()[position];
                     selectedCourseName = ExtractCoursesFromJsonString.getCourseNamesArray()[position];
                     selected_course.setText("" + selectedCourseName);
@@ -154,12 +155,6 @@ public class NewRound extends BaseActivity implements AdapterView.OnItemSelected
         getRoundID();
     }
 
-    /**
-     * This method is used to get the id of the round just created. This id will be
-     * sent to the the ShotInputScreen activity and the id will be put into the SQLite database
-     * to identify which round each shot is connected with. This roundID is then put in an
-     * intent and the ShotInputScreen activity is started.
-     */
     public void getRoundID(){
         try {
             Log.i("TAG", "getRoundID - started");
@@ -175,9 +170,8 @@ public class NewRound extends BaseActivity implements AdapterView.OnItemSelected
             Preferences.insertBoolean("isNewRound", true, this);
             Intent intentGoToShotInputScreen = new Intent(NewRound.this, ShotInputScreen.class);
             intentGoToShotInputScreen.putExtra("roundID", roundID);
-            //intentGoToShotInputScreen.putStringArrayListExtra("pinsArray", pins);
             startActivity(intentGoToShotInputScreen);
-    }//getRoundID
+    }
 
 
     private void addHandicapChoiceSpinner(){
@@ -246,8 +240,9 @@ public class NewRound extends BaseActivity implements AdapterView.OnItemSelected
 
     @Override
     protected void onPause() {
+        Log.i("TAG", "NewRound - onPause called");
         super.onPause();
-        GPS.removeListeners();
+        //GPS.removeListeners();
     }
 
     @Override

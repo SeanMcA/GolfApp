@@ -13,6 +13,7 @@ public class Hole implements Parcelable{
     private int roundID;
 
     public Hole(Round round) {
+        shotList = new LinkedList<>();
         round.addHoleToRoundsHoleList(this);
     }
 

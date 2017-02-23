@@ -6,10 +6,11 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 /**
- * Created by sitting-room on 12/02/2017.
+ * REMOVE THIS WHOLE CLASS????????????????????
  */
 
 public class CourseRequestData {
+    Coordinates coordinates = new Coordinates();
 
     public static String courseData(String... args) throws UnsupportedEncodingException {
         String username = args[0];
@@ -22,8 +23,8 @@ public class CourseRequestData {
         return data;
     }
 
-    public static String courseUrl(){
-        return "http://zelusit.com/androidGetCourses.php?latitude=" + Coordinates.getLatitude() + "&longitude=" + Coordinates.getLongitude();
+    //public static String courseUrl(){
+        //return "http://zelusit.com/androidGetCourses.php?latitude=" + coordinates.getLatitude() + "&longitude=" + coordinates.getLongitude();
         //http://zelusit.com/androidGetCourses.php?latitude=53.3498&longitude=-6.2603
-    }
+    //}
 }

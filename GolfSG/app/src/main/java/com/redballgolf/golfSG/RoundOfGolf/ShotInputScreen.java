@@ -8,19 +8,25 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.redballgolf.golfSG.Common.BaseActivity;
 import com.redballgolf.golfSG.Course.PinsCoordinates;
 import com.redballgolf.golfSG.GPS.Coordinates;
 import com.redballgolf.golfSG.ObserverSubject.Observer;
+import com.redballgolf.golfSG.ObserverSubject.Subject;
 import com.redballgolf.golfSG.R;
 import com.redballgolf.golfSG.SharedPreferences.Preferences;
 
-public class ShotInputScreen extends BaseActivity implements Observer{
+import java.util.ArrayList;
+import java.util.List;
 
+public class ShotInputScreen extends BaseActivity implements Observer, AdapterView.OnItemSelectedListener{
     public static long POLLING_FREQUENCY = 0;//milliseconds.
     private static float MIN_DISTANCE = 1;//meters
 
@@ -39,8 +45,10 @@ public class ShotInputScreen extends BaseActivity implements Observer{
     private Button onGreen;
     public static Double distToGreen;
     public static String LoggedInId;
+    private int numberOfPutts;
     ImageView accuracyView;
     TextView holeNumberTextview;
+    TextView accuracyTextView;
     Round round;
     Hole hole;
 
@@ -50,40 +58,31 @@ public class ShotInputScreen extends BaseActivity implements Observer{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shot_input_screen);
 
-        Coordinates coordinates = new Coordinates();
-        coordinates.registerObserver(this);
+        Coordinates.registerObserver(this);
 
         LoggedInId = Preferences.getPreferences(this, "loginID");
         roundID = Preferences.getPreferencesInt(this, "roundID");
+
         Boolean isNewRound = Preferences.getPreferencesBoolean(this, "isNewRound");
         if(isNewRound){
             round = new Round(roundID);
             hole = new Hole(round);
             Preferences.insertBoolean("isNewRound", false, this);
         }
-        disableButtonsUntilGpsAccuracyBetterThan3();
 
         accuracyView = (ImageView)findViewById(R.id.gps_image);
-        holeNumberTextview = (TextView) findViewById(R.id.hole_number);
-        holeNumberTextview.setText("Hole: " + hole.getHoleNumber() + " - Shot: " + Shot.getShotNumber());
+        accuracyTextView = (TextView)findViewById(R.id.accuracy);
 
+        holeNumberTextview = (TextView) findViewById(R.id.hole_number);
+        displayHoleAndShotNumber();
+
+
+        disableButtonsUntilGpsAccuracyBetterThan3();
         displayDistanceToGreen();
     }//onCreate
 
 
-    /**
-     * This method adds data to the database regarding a shot that was hit.
-     * When the button is clicked, the id of the button is checked to see which button it was,
-     * then depending on which button was clicked the String variable 'place' is set to the
-     * correct value. Then an alert box is displayed to verify that the user wants to submit a shot
-     * and that its not a case of a button being clicked in error.
-     * If the user confirms that they want to submit the shot then
-     * the latitude and longitude are retrieved along with the hole number and the shot number
-     * as well as where the shot was hit from. This information is then sent to the addShot method
-     * in the DatabaseHelper class.
-     * @param view The view that was clicked.
-     */
-    public void buttonOnClick(View view)
+    public void recordShot(View view)
     {
         place = getClickedButton(view);
 
@@ -99,6 +98,7 @@ public class ShotInputScreen extends BaseActivity implements Observer{
                         Shot shot = new Shot(hole, place);
                         shot.addShotToSqlite(ShotInputScreen.this);
                         shot.addShotToHolesShotList();
+                        displayHoleAndShotNumber();
                     }
                 });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -108,8 +108,7 @@ public class ShotInputScreen extends BaseActivity implements Observer{
                 });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
-
-    }//buttonOnClick
+    }
 
 
     private void displayDistanceToGreen(){
@@ -119,24 +118,13 @@ public class ShotInputScreen extends BaseActivity implements Observer{
         distanceToGreenTV.setText("Distance to Green: " + distToGreenInt + " yards.");
     }
 
-    public void goToGreen(View view){
-//        Intent intentGoToGreenScreen = new Intent(ShotInputScreen.this,OnGreen.class);
-//        //Log.i(TAG, "goToGreen started");
-//        MIN_DISTANCE = 1;
-//        intentGoToGreenScreen.putExtra("roundID", roundID);
-//        intentGoToGreenScreen.putExtra("shot_number", shot_counter);
-//        intentGoToGreenScreen.putExtra("hole_number", hole_counter);
-//        //Log.i(TAG, "Sending to GREEN sn: " + shot_counter);
-//        startActivity(intentGoToGreenScreen);
-
+    private void displayHoleAndShotNumber(){
+        holeNumberTextview.setText("Hole: " + hole.getHoleNumber() + " - Shot: " + Shot.getShotNumber());
     }
-
-    public void endHole(View view){
-        Intent intent = new Intent(ShotInputScreen.this, HoleSummary.class);
-        intent.putExtra("Hole", hole);
-        startActivity(intent);
-//        HoleSummaryData hsd = new HoleSummaryData(this);
-//        hsd.getSummaryDataForHole(hole);
+    public void goToGreen(View view){
+        Intent intentGoToGreenScreen = new Intent(ShotInputScreen.this,OnTheGreen.class);
+        intentGoToGreenScreen.putExtra("Hole", hole);
+        startActivity(intentGoToGreenScreen);
 
     }
 
@@ -146,25 +134,22 @@ public class ShotInputScreen extends BaseActivity implements Observer{
         this.latitude = currentLatitude;
         this.longitude = currentLongitude;
         this.accuracy = accuracy;
-        if(accuracy <=5){
+        if(accuracy <= 30){
             enableButtons(accuracy);
         }else{
+            accuracyTextView.setText("Accuracy is: " + accuracy);//comment out...this is for testing
             disableButtonsUntilGpsAccuracyBetterThan3();
         }
+        displayDistanceToGreen();
     }
 
 
     private void enableButtons(double accuracy) {
-        TextView accuracyTextView = (TextView)findViewById(R.id.accuracy);
         accuracyTextView.setText("Accuracy is: " + accuracy);
-        ImageView accuracyView = (ImageView)findViewById(R.id.gps_image);
+        accuracyView = (ImageView)findViewById(R.id.gps_image);
 
-        if(accuracy <= 5){
             POLLING_FREQUENCY = 1000;
             accuracyView.setImageResource(R.drawable.gps_green);
-
-            penalty.setEnabled(true);
-            penalty.getBackground().setColorFilter(null);
 
             onGreen.setEnabled(true);
             onGreen.getBackground().setColorFilter(null);
@@ -186,7 +171,6 @@ public class ShotInputScreen extends BaseActivity implements Observer{
 
             bunker.setEnabled(true);
             bunker.getBackground().setColorFilter(null);
-        }
     }
 
     private void disableButtonsUntilGpsAccuracyBetterThan3(){
@@ -194,10 +178,6 @@ public class ShotInputScreen extends BaseActivity implements Observer{
         onGreen = (Button)findViewById(R.id.flag);
         onGreen.setEnabled(false);
         onGreen.getBackground().setColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY);
-
-        penalty = (Button)findViewById(R.id.out_of_bounds);
-        penalty.setEnabled(false);
-        penalty.getBackground().setColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY);
 
         mydriver = (Button)findViewById(R.id.driver);
         mydriver.setEnabled(false);
@@ -251,6 +231,44 @@ public class ShotInputScreen extends BaseActivity implements Observer{
                 break;
         }//switch
         return place;
+    }
+
+    private void addHandicapChoiceSpinner(){
+        Log.i("TAG","NewRound - Spinner added");
+        // Spinner element
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        // Spinner click listener
+        spinner.setOnItemSelectedListener(this);
+        // Spinner Drop down elements
+        List<Integer> categories = new ArrayList<>();
+        categories.add(0);
+        categories.add(1);
+        categories.add(2);
+        categories.add(3);
+        categories.add(4);
+        categories.add(5);
+        categories.add(6);
+
+
+
+        // Creating adapter for spinner
+        ArrayAdapter<Integer> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
+
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        spinner.setAdapter(dataAdapter);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        numberOfPutts = (Integer)parent.getItemAtPosition(position);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        //put code here.
     }
 
 }//class
