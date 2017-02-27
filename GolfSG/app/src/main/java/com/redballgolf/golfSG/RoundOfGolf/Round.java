@@ -16,7 +16,7 @@ public class Round {
     }
 
 
-    public void addHoleToRoundsHoleList(Hole hole){
+    public void addHoleToRound(Hole hole){
        holeList.add(hole);
     }
 

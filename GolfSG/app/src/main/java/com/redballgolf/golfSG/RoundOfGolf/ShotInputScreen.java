@@ -9,22 +9,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.redballgolf.golfSG.Common.BaseActivity;
 import com.redballgolf.golfSG.Course.PinsCoordinates;
 import com.redballgolf.golfSG.GPS.Coordinates;
 import com.redballgolf.golfSG.ObserverSubject.Observer;
-import com.redballgolf.golfSG.ObserverSubject.Subject;
 import com.redballgolf.golfSG.R;
 import com.redballgolf.golfSG.SharedPreferences.Preferences;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ShotInputScreen extends BaseActivity implements Observer, AdapterView.OnItemSelectedListener{
     public static long POLLING_FREQUENCY = 0;//milliseconds.
@@ -66,7 +60,8 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
         Boolean isNewRound = Preferences.getPreferencesBoolean(this, "isNewRound");
         if(isNewRound){
             round = new Round(roundID);
-            hole = new Hole(round);
+            hole = new Hole();
+            round.addHoleToRound(hole);
             Preferences.insertBoolean("isNewRound", false, this);
         }
 
@@ -95,9 +90,10 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
                     public void onClick(DialogInterface dialog, int id) {
                         //If user clicks 'ok' then run this code to send lat and long
                         //to addProduct method which is located in the DatabaseHelper class.
-                        Shot shot = new Shot(hole, place);
+                        Shot shot = new Shot(place);
                         shot.addShotToSqlite(ShotInputScreen.this);
-                        shot.addShotToHolesShotList();
+                        //shot.addShotToList();
+                        hole.addShotToList(shot);
                         displayHoleAndShotNumber();
                     }
                 });
@@ -121,7 +117,9 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
     private void displayHoleAndShotNumber(){
         holeNumberTextview.setText("Hole: " + hole.getHoleNumber() + " - Shot: " + Shot.getShotNumber());
     }
-    public void goToGreen(View view){
+
+
+    public void goToHoleSummary(View view){
         Intent intentGoToGreenScreen = new Intent(ShotInputScreen.this,OnTheGreen.class);
         intentGoToGreenScreen.putExtra("Hole", hole);
         startActivity(intentGoToGreenScreen);
@@ -142,6 +140,8 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
         }
         displayDistanceToGreen();
     }
+
+
 
 
     private void enableButtons(double accuracy) {
@@ -229,37 +229,17 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
             case R.id.flag:
                 place = "green";
                 break;
+            case R.id.penalty:
+                place = "penalty";
+                break;
+            case R.id.firstPutt:
+                place = "firstPutt";
+                break;
         }//switch
         return place;
     }
 
-    private void addHandicapChoiceSpinner(){
-        Log.i("TAG","NewRound - Spinner added");
-        // Spinner element
-        Spinner spinner = (Spinner) findViewById(R.id.spinner);
-        // Spinner click listener
-        spinner.setOnItemSelectedListener(this);
-        // Spinner Drop down elements
-        List<Integer> categories = new ArrayList<>();
-        categories.add(0);
-        categories.add(1);
-        categories.add(2);
-        categories.add(3);
-        categories.add(4);
-        categories.add(5);
-        categories.add(6);
 
-
-
-        // Creating adapter for spinner
-        ArrayAdapter<Integer> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
-
-        // Drop down layout style - list view with radio button
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        // attaching data adapter to spinner
-        spinner.setAdapter(dataAdapter);
-    }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

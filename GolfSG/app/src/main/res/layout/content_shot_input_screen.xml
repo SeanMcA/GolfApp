@@ -22,17 +22,44 @@
 
 
             <Button
-                android:id="@+id/flag"
+                android:id="@+id/penalty"
                 android:layout_width="0dp"
-                android:layout_weight="0.9"
+                android:layout_weight="0.33"
                 android:layout_height="40dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:background="#FF99CC00"
-                android:text="On The Green"
-                android:onClick="goToGreen"
+                android:text="Penalty"
+                android:onClick="recordShot"
                 android:elevation="0dp" />
+
+            <Button
+                android:id="@+id/firstPutt"
+                android:layout_width="0dp"
+                android:layout_weight="0.33"
+                android:layout_height="40dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="#FF99CC00"
+                android:text="First Putt"
+                android:onClick="recordShot"
+                android:elevation="0dp" />
+
+            <Button
+                android:id="@+id/flag"
+                android:layout_width="0dp"
+                android:layout_weight="0.33"
+                android:layout_height="40dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="#FF99CC00"
+                android:text="FLAG"
+                android:onClick="goToHoleSummary"
+                android:elevation="0dp" />
+
 
 
 
