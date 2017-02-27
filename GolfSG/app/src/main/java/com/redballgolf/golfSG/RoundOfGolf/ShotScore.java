@@ -5,9 +5,22 @@ import java.util.Iterator;
 
 public class ShotScore {
 
-    public static void calculateEachShotOnThis(Hole hole){
+    public static void calculateEachShotOnThis(Hole hole, Flag flag){
+        double flagLatitude = flag.getFlagLatitude();
+        double flagLongitude = flag.getFlagLongitude();
         Iterator listIterator = hole.getShotList().listIterator();
         while (listIterator.hasNext()) {
+            double shotLatitude = ((Shot)listIterator.next()).getShotLatitude();
+            double shotLongitude = ((Shot)listIterator.next()).getShotLongitude();
+            String lie = ((Shot)listIterator.next()).getLie();
+            double shotDistance = CalculateDistance.distanceIs(shotLatitude, shotLongitude, flagLatitude, flagLongitude);
+            ((Shot)listIterator.next()).setDistanceOfShot(shotDistance);
+            double shotDifficulty = shotDifficulty(shotDistance, lie);
+        }
+    }
+
+    private static double shotDifficulty(double shotDistance, String lie){
+        if(lie.equals()){
 
         }
     }

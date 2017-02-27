@@ -124,7 +124,8 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
 
 
     public void goToHoleSummary(View view){
-        ShotScore.calculateEachShotOnThis(hole);
+        Flag flag = new Flag();
+        ShotScore.calculateEachShotOnThis(hole, flag);
         Intent goToHoleSummary = new Intent(ShotInputScreen.this,HoleSummary.class);
         goToHoleSummary.putExtra("Hole", hole);
         startActivity(goToHoleSummary);
