@@ -29,7 +29,7 @@ public class AfterLogin extends BaseActivity implements Observer {
         Coordinates.registerObserver(this);
 
         gps = (ImageView)findViewById(R.id.gps_image);
-        if(Coordinates.getAccuracy() < 200) {
+        if(Coordinates.getAccuracy() < 200 && Coordinates.getAccuracy() != 0.0){
             gps.setImageResource(R.drawable.gps_green);
         }else{
             gps.setImageResource(R.drawable.gps_red);
@@ -60,7 +60,7 @@ public class AfterLogin extends BaseActivity implements Observer {
 
     public void goToNewRound(View view) {
         Log.i("TAG", "goToNewRound started");
-        if (Coordinates.getAccuracy() < 200){
+        if (Coordinates.getAccuracy() < 200 && Coordinates.getAccuracy() != 0.0){
                 Intent intentGoToNewRound = new Intent(AfterLogin.this, NewRound.class);
                 startActivity(intentGoToNewRound);
             }else{

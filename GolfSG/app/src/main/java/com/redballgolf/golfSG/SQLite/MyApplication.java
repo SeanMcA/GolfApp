@@ -10,7 +10,7 @@ import com.facebook.stetho.Stetho;
 public class MyApplication extends Application {
 
     public void onCreate() {
-        Log.i("TAG","MyApplication started");
+        //Log.i("TAG","MyApplication started");
         super.onCreate();
         //Stetho.initializeWithDefaults(this);
 

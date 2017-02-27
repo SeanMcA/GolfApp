@@ -63,7 +63,12 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
             hole = new Hole();
             round.addHoleToRound(hole);
             Preferences.insertBoolean("isNewRound", false, this);
+        }else{
+            hole = new Hole();
+            round.addHoleToRound(hole);
         }
+
+
 
         accuracyView = (ImageView)findViewById(R.id.gps_image);
         accuracyTextView = (TextView)findViewById(R.id.accuracy);
@@ -92,7 +97,6 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
                         //to addProduct method which is located in the DatabaseHelper class.
                         Shot shot = new Shot(place);
                         shot.addShotToSqlite(ShotInputScreen.this);
-                        //shot.addShotToList();
                         hole.addShotToList(shot);
                         displayHoleAndShotNumber();
                     }
@@ -120,9 +124,10 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
 
 
     public void goToHoleSummary(View view){
-        Intent intentGoToGreenScreen = new Intent(ShotInputScreen.this,OnTheGreen.class);
-        intentGoToGreenScreen.putExtra("Hole", hole);
-        startActivity(intentGoToGreenScreen);
+        ShotScore.calculateEachShotOnThis(hole);
+        Intent goToHoleSummary = new Intent(ShotInputScreen.this,HoleSummary.class);
+        goToHoleSummary.putExtra("Hole", hole);
+        startActivity(goToHoleSummary);
 
     }
 

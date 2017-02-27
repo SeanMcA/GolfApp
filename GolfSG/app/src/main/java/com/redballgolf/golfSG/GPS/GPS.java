@@ -55,6 +55,7 @@ public class GPS{
         lm = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
+            //Log.i("TAG","GPS permissions granted for FINE_LOCATION");
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
             //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -76,9 +77,10 @@ public class GPS{
     }
 
     public static void resumeListeners(){
+        Log.i("TAG","GPS resume listeners called");
                 if (ContextCompat.checkSelfPermission(mContext, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locl);
-            //lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locl);
+            //lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locl);
+            lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locl);
         }
     }
 

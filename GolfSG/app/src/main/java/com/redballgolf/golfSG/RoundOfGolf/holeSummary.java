@@ -3,6 +3,7 @@ package com.redballgolf.golfSG.RoundOfGolf;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TableLayout;
@@ -22,7 +23,7 @@ public class HoleSummary extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        Log.i("TAG","HoleSummary onCreate started");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hole_summary);
 

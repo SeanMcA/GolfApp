@@ -69,7 +69,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".RoundOfGolf.holeSummary"
+            android:name=".RoundOfGolf.HoleSummary"
             android:label="@string/title_activity_hole_summary"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
