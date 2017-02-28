@@ -49,8 +49,6 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
     public static final String PENALTY = "Penalty";
     public static final String RECOVERY = "Recovery";
     public static final String PUTT = "First putt";
-    private boolean isFirstShot = true;
-    private boolean notFirstShot = false;
     ImageView accuracyView;
     TextView holeNumberTextview;
     TextView accuracyTextView;
@@ -104,17 +102,10 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
         builder.setCancelable(false);
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        if (hole.isThisTheFirstShotOnThisHole()){
-                            Shot shot = new Shot(place, isFirstShot);
+                            Shot shot = new Shot(place);
                             shot.addShotToSqlite(ShotInputScreen.this);
                             hole.addShotToList(shot);
                             displayHoleAndShotNumber();
-                        } else {
-                            Shot shot = new Shot(place, notFirstShot);
-                            shot.addShotToSqlite(ShotInputScreen.this);
-                            hole.addShotToList(shot);
-                            displayHoleAndShotNumber();
-                        }
                     }
                 });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
