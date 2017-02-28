@@ -20,8 +20,21 @@ public class ShotScore {
     }
 
     private static double shotDifficulty(double shotDistance, String lie){
-        if(lie.equals()){
-
+        double shotDifficulty;
+        if(lie.equals("firstPutt")){
+            shotDifficulty = calculatePuttingDifficulty(shotDistance);
+        }else{
+            shotDifficulty = calculateShotDifficulty(shotDistance);
         }
+        return shotDifficulty;
+    }
+
+
+    private static double calculatePuttingDifficulty(double distance){
+
+    }
+
+    private static double calculateShotDifficulty(double distance){
+
     }
 }

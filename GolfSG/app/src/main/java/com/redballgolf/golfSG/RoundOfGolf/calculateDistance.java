@@ -3,9 +3,9 @@ package com.redballgolf.golfSG.RoundOfGolf;
 
 
 public class CalculateDistance {
-    public static double distanceIs(Double Lat, Double Long, Double lastLat, Double lastLong){
-        double theta = Long - lastLong;
-        double dist = Math.sin(deg2rad(Lat)) * Math.sin(deg2rad(lastLat)) + Math.cos(deg2rad(Lat)) * Math.cos(deg2rad(lastLat)) * Math.cos(deg2rad(theta));
+    public static double distanceIs(Double firstLat, Double firstLong, Double lastLat, Double lastLong){
+        double theta = firstLong - lastLong;
+        double dist = Math.sin(deg2rad(firstLat)) * Math.sin(deg2rad(lastLat)) + Math.cos(deg2rad(firstLat)) * Math.cos(deg2rad(lastLat)) * Math.cos(deg2rad(theta));
         dist = Math.acos(dist);
         dist = rad2deg(dist);
         dist = dist * 60 * 1.1515;
