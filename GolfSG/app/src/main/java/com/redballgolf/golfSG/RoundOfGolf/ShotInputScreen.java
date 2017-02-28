@@ -37,9 +37,20 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
     private Button bunker;
     private Button penalty;
     private Button onGreen;
-    public static Double distToGreen;
+    public static double distToGreen;
     public static String LoggedInId;
     private int numberOfPutts;
+    public static final String TEESHOTDRIVER = "tee";
+    public static final String TEESHOTIRON = "tee";
+    public static final String FAIRWAY = "Fairway";
+    public static final String ROUGH = "Rough";
+    public static final String SAND = "Sand";
+    public static final String TREES = "Trees";
+    public static final String PENALTY = "Penalty";
+    public static final String RECOVERY = "Recovery";
+    public static final String PUTT = "First putt";
+    private boolean isFirstShot = true;
+    private boolean notFirstShot = false;
     ImageView accuracyView;
     TextView holeNumberTextview;
     TextView accuracyTextView;
@@ -93,12 +104,17 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
         builder.setCancelable(false);
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        //If user clicks 'ok' then run this code to send lat and long
-                        //to addProduct method which is located in the DatabaseHelper class.
-                        Shot shot = new Shot(place);
-                        shot.addShotToSqlite(ShotInputScreen.this);
-                        hole.addShotToList(shot);
-                        displayHoleAndShotNumber();
+                        if (hole.isThisTheFirstShotOnThisHole()){
+                            Shot shot = new Shot(place, isFirstShot);
+                            shot.addShotToSqlite(ShotInputScreen.this);
+                            hole.addShotToList(shot);
+                            displayHoleAndShotNumber();
+                        } else {
+                            Shot shot = new Shot(place, notFirstShot);
+                            shot.addShotToSqlite(ShotInputScreen.this);
+                            hole.addShotToList(shot);
+                            displayHoleAndShotNumber();
+                        }
                     }
                 });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -113,7 +129,7 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
 
     private void displayDistanceToGreen(){
         distToGreen = CalculateDistance.distanceIs(latitude, longitude, PinsCoordinates.getPinLatitude(), PinsCoordinates.getPinLongitude());
-        Integer distToGreenInt = distToGreen.intValue();
+        int distToGreenInt = (int)distToGreen;
         TextView distanceToGreenTV = (TextView) findViewById(R.id.distanceToGreen);
         distanceToGreenTV.setText("Distance to Green: " + distToGreenInt + " yards.");
     }
@@ -126,6 +142,7 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
     public void goToHoleSummary(View view){
         Flag flag = new Flag();
         ShotScore.calculateEachShotOnThis(hole, flag);
+        ShotScore.calculateFinalShotScore(hole);
         Intent goToHoleSummary = new Intent(ShotInputScreen.this,HoleSummary.class);
         goToHoleSummary.putExtra("Hole", hole);
         startActivity(goToHoleSummary);
@@ -215,33 +232,30 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
         switch(view.getId())
         {
             case R.id.driver:
-                place = "tee_shot_driver";
+                place = ShotInputScreen.TEESHOTDRIVER;
                 break;
             case R.id.iron:
-                place = "tee_shot_iron";
+                place = ShotInputScreen.TEESHOTIRON;
                 break;
             case R.id.fairway:
-                place = "fairway";
+                place = ShotInputScreen.FAIRWAY;
                 break;
             case R.id.right_trees:
-                place = "rightTrees";
+                place = ShotInputScreen.TREES;
                 break;
             case R.id.right_rough:
-                place = "rightRough";
+                place = ShotInputScreen.ROUGH;
                 break;
             case R.id.right_bunker:
-                place = "rightBunker";
-                break;
-            case R.id.flag:
-                place = "green";
+                place = ShotInputScreen.ROUGH;
                 break;
             case R.id.penalty:
-                place = "penalty";
+                place = ShotInputScreen.PENALTY;
                 break;
             case R.id.firstPutt:
-                place = "firstPutt";
+                place = ShotInputScreen.PUTT;
                 break;
-        }//switch
+        }
         return place;
     }
 

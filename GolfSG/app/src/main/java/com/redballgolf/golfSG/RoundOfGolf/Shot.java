@@ -16,11 +16,13 @@ public class Shot implements Parcelable{
     private double shotDifficultyRating;
     private double shotScore;
     private static int shotNumber = 1;
+    private boolean firstShot = false;
 
-    public Shot(String lie){
+    public Shot(String lie, Boolean firstShot){
         this.lie = lie;
         this.shotLatitude = Coordinates.getLatitude();
         this.shotLongitude = Coordinates.getLongitude();
+        this.firstShot = firstShot;
     }
 
 
@@ -42,6 +44,10 @@ public class Shot implements Parcelable{
 
     public double getShotDifficultyRating() {
         return shotDifficultyRating;
+    }
+
+    public boolean isFirstShot() {
+        return firstShot;
     }
 
     public double getShotScore() {

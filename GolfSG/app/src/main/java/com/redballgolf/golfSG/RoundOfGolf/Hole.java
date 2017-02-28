@@ -33,6 +33,14 @@ public class Hole implements Parcelable{
         Hole.holeNumber = holeNumber;
     }
 
+    public boolean isThisTheFirstShotOnThisHole(){
+        if(shotList.size() == 0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
 
     public ArrayList getHoleSummary() {
         ArrayList holeSummary = new ArrayList();
