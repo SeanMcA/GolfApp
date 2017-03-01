@@ -2,6 +2,8 @@ package com.redballgolf.golfSG.RoundOfGolf;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -15,6 +17,19 @@ public class Hole implements Parcelable{
         shotList = new LinkedList<>();
     }
 
+    public ArrayList getHoleSummary() {
+        ArrayList holeSummary = new ArrayList();
+        Iterator listIterator = shotList.listIterator();
+        while (listIterator.hasNext()) {
+            Shot shot = ((Shot)listIterator.next());
+            String lie = shot.getLie();
+            Log.i("TAG","Hole - lie is: " + lie);
+            String score = String.valueOf(shot.getShotScore());
+            holeSummary.add(lie);
+            holeSummary.add(score);
+        }
+        return holeSummary;
+    }
 
 
     public void addShotToList(Shot shot) {
@@ -29,33 +44,9 @@ public class Hole implements Parcelable{
         return holeNumber;
     }
 
-    public static void setHoleNumber(int holeNumber) {
-        Hole.holeNumber = holeNumber;
-    }
-
-    public boolean isThisTheFirstShotOnThisHole(){
-        if(shotList.size() == 0){
-            return true;
-        }else{
-            return false;
-        }
-    }
 
 
-    public ArrayList getHoleSummary() {
-        ArrayList holeSummary = new ArrayList();
-        Iterator listIterator = shotList.listIterator();
-        while (listIterator.hasNext()) {
-            String lie = (((Shot) listIterator.next()).getLie());
-            String score = String.valueOf((((Shot) listIterator.next()).getShotScore()));
-            holeSummary.add(lie);
-            holeSummary.add(score);
-        }
-        return holeSummary;
-    }
-
-
-
+    //PARCELABLE CODE.
     protected Hole(Parcel in) {
         shotList = in.createTypedArrayList(Shot.CREATOR);
     }

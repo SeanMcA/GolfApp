@@ -172,7 +172,7 @@
 
 
             <Button
-                android:id="@+id/right_trees"
+                android:id="@+id/trees"
                 android:text="TREES"
                 android:textColor="#ffffff"
                 android:onClick="recordShot"
@@ -183,7 +183,7 @@
 
 
             <Button
-                android:id="@+id/right_bunker"
+                android:id="@+id/bunker"
                 android:text="BUNKER"
                 android:textColor="#ffffff"
                 android:background="@drawable/golf_bunker2"
@@ -195,7 +195,7 @@
 
 
             <Button
-                android:id="@+id/right_rough"
+                android:id="@+id/rough"
                 android:text="ROUGH"
                 android:textColor="#ffffff"
                 android:onClick="recordShot"

@@ -23,6 +23,11 @@ public class Shot implements Parcelable{
         this.shotLongitude = Coordinates.getLongitude();
     }
 
+    public void addShotToSqlite(Context context){
+        DatabaseHelper dbHandler = new DatabaseHelper(context);
+        dbHandler.addShotToDB(shotLatitude, shotLongitude, lie, Hole.getHoleNumber(), getShotNumber(), Round.getRoundID());
+        shotNumber++;
+    }
 
     public double getShotLatitude() {
         return shotLatitude;
@@ -48,10 +53,6 @@ public class Shot implements Parcelable{
         return shotScore;
     }
 
-    public void setLie(String lie) {
-        this.lie = lie;
-    }
-
     public void setDistanceOfShot(double distanceOfShot) {
         this.distanceOfShot = distanceOfShot;
     }
@@ -68,12 +69,9 @@ public class Shot implements Parcelable{
         return shotNumber;
     }
 
-    public void addShotToSqlite(Context context){
-        DatabaseHelper dbHandler = new DatabaseHelper(context);
-        dbHandler.addShotToDB(shotLatitude, shotLongitude, lie, Hole.getHoleNumber(), getShotNumber(), Round.getRoundID());
-        shotNumber++;
-    }
 
+
+    //PARCELABLE CODE.
     protected Shot(Parcel in) {
         shotLatitude = in.readDouble();
         shotLongitude = in.readDouble();

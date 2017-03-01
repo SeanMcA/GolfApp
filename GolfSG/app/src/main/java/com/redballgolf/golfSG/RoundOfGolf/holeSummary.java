@@ -64,6 +64,7 @@ public class HoleSummary extends BaseActivity {
     }
 
     private void getSummaryDataForHoleAndDisplay(TableLayout tableLayout){
+        Log.i("TAG","HoleSummary - getSummaryData started");
         ArrayList <String> holeSummaryData = hole.getHoleSummary();
         int numberOfShots = holeSummaryData.size();
         for(int i = 0; i < numberOfShots; i = i + 2) {

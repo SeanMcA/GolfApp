@@ -1,6 +1,8 @@
 package com.redballgolf.golfSG.RoundOfGolf;
 
 
+import android.util.Log;
+
 import java.util.Iterator;
 import java.util.ListIterator;
 
@@ -11,26 +13,35 @@ public class ShotScore {
     public static void calculateEachShotOnThis(Hole hole, Flag flag){
         double flagLatitude = flag.getFlagLatitude();
         double flagLongitude = flag.getFlagLongitude();
+
         Iterator listIterator = hole.getShotList().listIterator();
         while (listIterator.hasNext()) {
-            double shotLatitude = ((Shot)listIterator.next()).getShotLatitude();
-            double shotLongitude = ((Shot)listIterator.next()).getShotLongitude();
-            String lie = ((Shot)listIterator.next()).getLie();
+            Shot shot = ((Shot)listIterator.next());
+
+            double shotLatitude = shot.getShotLatitude();
+            double shotLongitude = shot.getShotLongitude();
+            String lie = shot.getLie();
 
             double shotDistance = CalculateDistance.distanceIs(shotLatitude, shotLongitude, flagLatitude, flagLongitude);
-            ((Shot)listIterator.next()).setDistanceOfShot(shotDistance);
+            //Log.i("TAG","ShotScore - shotDistance is: " + shotDistance);
+            shot.setDistanceOfShot(shotDistance);
 
             shotDifficulty = getShotDifficulty(shotDistance, lie);
-            ((Shot)listIterator.next()).setShotDifficultyRating(shotDifficulty);
+            shot.setShotDifficultyRating(shotDifficulty);
+            Log.i("TAG","ShotScore - shotDifficulty is: " + shotDifficulty);
         }
     }
 
     public static void calculateFinalShotScore(Hole hole){
+        Log.i("TAG","ShotScore - calculateFInalShotScoreStarted");
         ListIterator listIterator = hole.getShotList().listIterator();
         while (listIterator.hasPrevious()) {
-            double score1 = ((Shot)listIterator.next()).getShotDifficultyRating();
-            double score2 = ((Shot)listIterator.previous()).getShotDifficultyRating();
+            Shot shot = ((Shot)listIterator.next());
+            double score1 = shot.getShotDifficultyRating();
+            double score2 = shot.getShotDifficultyRating();
             double score = score2 - score1;
+            Log.i("TAG","ShotScore - finalShotScore is: " + score);
+            shot.setShotScore(score);
         }
     }
 

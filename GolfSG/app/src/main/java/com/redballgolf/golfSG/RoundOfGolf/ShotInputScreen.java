@@ -24,11 +24,11 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
     public static long POLLING_FREQUENCY = 0;//milliseconds.
     private static float MIN_DISTANCE = 1;//meters
 
-    public static int roundID;
+    private int roundID;
     private double latitude;
     private double longitude;
     private double accuracy;
-    public static String place;
+    private String place;
     private Button mydriver;
     private Button myiron;
     private Button fairway;
@@ -37,8 +37,8 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
     private Button bunker;
     private Button penalty;
     private Button onGreen;
-    public static double distToGreen;
-    public static String LoggedInId;
+    private double distToGreen;
+    private String LoggedInId;
     private int numberOfPutts;
     public static final String TEESHOTDRIVER = "tee";
     public static final String TEESHOTIRON = "tee";
@@ -49,10 +49,10 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
     public static final String PENALTY = "Penalty";
     public static final String RECOVERY = "Recovery";
     public static final String PUTT = "First putt";
-    ImageView accuracyView;
-    TextView holeNumberTextview;
-    TextView accuracyTextView;
-    Round round;
+    private ImageView accuracyView;
+    private TextView holeNumberTextview;
+    private TextView accuracyTextView;
+    private Round round;
     Hole hole;
 
 
@@ -95,8 +95,6 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
     {
         place = getClickedButton(view);
 
-        //AlertDialog to check if user actually wants to submit shot
-        //and its not a case of clicking button by accident.
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Are you sure you want to submit this shot?");
         builder.setCancelable(false);
@@ -117,6 +115,15 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
         alertDialog.show();
     }
 
+    public void goToHoleSummary(View view){
+        Flag flag = new Flag();
+        ShotScore.calculateEachShotOnThis(hole, flag);
+        ShotScore.calculateFinalShotScore(hole);
+        Intent goToHoleSummary = new Intent(ShotInputScreen.this,HoleSummary.class);
+        goToHoleSummary.putExtra("Hole", hole);
+        Log.i("TAG","ShotInputScreen - shot scores calculated");
+        startActivity(goToHoleSummary);
+    }
 
     private void displayDistanceToGreen(){
         distToGreen = CalculateDistance.distanceIs(latitude, longitude, PinsCoordinates.getPinLatitude(), PinsCoordinates.getPinLongitude());
@@ -129,24 +136,13 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
         holeNumberTextview.setText("Hole: " + hole.getHoleNumber() + " - Shot: " + Shot.getShotNumber());
     }
 
-
-    public void goToHoleSummary(View view){
-        Flag flag = new Flag();
-        ShotScore.calculateEachShotOnThis(hole, flag);
-        ShotScore.calculateFinalShotScore(hole);
-        Intent goToHoleSummary = new Intent(ShotInputScreen.this,HoleSummary.class);
-        goToHoleSummary.putExtra("Hole", hole);
-        startActivity(goToHoleSummary);
-
-    }
-
     @Override
     public void update(double currentLatitude, double currentLongitude, double accuracy) {
         Log.i("TAG", "ShotInputScreen - update from observer received.");
         this.latitude = currentLatitude;
         this.longitude = currentLongitude;
         this.accuracy = accuracy;
-        if(accuracy <= 30){
+        if(accuracy <= 50){
             enableButtons(accuracy);
         }else{
             accuracyTextView.setText("Accuracy is: " + accuracy);//comment out...this is for testing
@@ -154,9 +150,6 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
         }
         displayDistanceToGreen();
     }
-
-
-
 
     private void enableButtons(double accuracy) {
         accuracyTextView.setText("Accuracy is: " + accuracy);
@@ -231,14 +224,14 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
             case R.id.fairway:
                 place = ShotInputScreen.FAIRWAY;
                 break;
-            case R.id.right_trees:
+            case R.id.trees:
                 place = ShotInputScreen.TREES;
                 break;
-            case R.id.right_rough:
+            case R.id.rough:
                 place = ShotInputScreen.ROUGH;
                 break;
-            case R.id.right_bunker:
-                place = ShotInputScreen.ROUGH;
+            case R.id.bunker:
+                place = ShotInputScreen.SAND;
                 break;
             case R.id.penalty:
                 place = ShotInputScreen.PENALTY;
