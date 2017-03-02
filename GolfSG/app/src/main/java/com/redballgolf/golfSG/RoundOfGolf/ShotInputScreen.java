@@ -66,6 +66,9 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
         LoggedInId = Preferences.getPreferences(this, "loginID");
         roundID = Preferences.getPreferencesInt(this, "roundID");
 
+        Intent intent = getIntent();
+        round = intent.getExtras().getParcelable("Round");
+
         Boolean isNewRound = Preferences.getPreferencesBoolean(this, "isNewRound");
         if(isNewRound){
             round = new Round(roundID);
@@ -121,6 +124,7 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
         ShotScore.calculateFinalShotScore(hole);
         Intent goToHoleSummary = new Intent(ShotInputScreen.this,HoleSummary.class);
         goToHoleSummary.putExtra("Hole", hole);
+        goToHoleSummary.putExtra("Round", round);
         Log.i("TAG","ShotInputScreen - shot scores calculated");
         startActivity(goToHoleSummary);
     }
@@ -138,7 +142,7 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
 
     @Override
     public void update(double currentLatitude, double currentLongitude, double accuracy) {
-        Log.i("TAG", "ShotInputScreen - update from observer received.");
+        //Log.i("TAG", "ShotInputScreen - update from observer received.");
         this.latitude = currentLatitude;
         this.longitude = currentLongitude;
         this.accuracy = accuracy;
@@ -198,15 +202,15 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
         fairway.setEnabled(false);
         fairway.getBackground().setColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY);
 
-        rough = (Button)findViewById(R.id.right_rough);
+        rough = (Button)findViewById(R.id.rough);
         rough.setEnabled(false);
         rough.getBackground().setColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY);
 
-        trees = (Button)findViewById(R.id.right_trees);
+        trees = (Button)findViewById(R.id.trees);
         trees.setEnabled(false);
         trees.getBackground().setColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY);
 
-        bunker = (Button)findViewById(R.id.right_bunker);
+        bunker = (Button)findViewById(R.id.bunker);
         bunker.setEnabled(false);
         bunker.getBackground().setColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY);
     }

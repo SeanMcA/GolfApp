@@ -69,10 +69,10 @@ public class GPS{
     }//onCreate
 
     private void makeUseOfNewLocation(Location loc) {
-        Log.i("TAG", "makeUseOfNewLocation started");
-        Log.i("TAG", "Latitude is: " + loc.getLatitude());
-        Log.i("TAG", "Longitude is: " + loc.getLongitude());
-        Log.i("TAG", "Accuracy is:" + loc.getAccuracy());
+        //Log.i("TAG", "makeUseOfNewLocation started");
+        //Log.i("TAG", "Latitude is: " + loc.getLatitude());
+        //Log.i("TAG", "Longitude is: " + loc.getLongitude());
+        //Log.i("TAG", "Accuracy is:" + loc.getAccuracy());
         coordinates.setCoordinates(loc.getLatitude(), loc.getLongitude(), loc.getAccuracy());
     }
 

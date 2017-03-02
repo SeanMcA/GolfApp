@@ -14,9 +14,8 @@ public class ShotScore {
         double flagLatitude = flag.getFlagLatitude();
         double flagLongitude = flag.getFlagLongitude();
 
-        Iterator listIterator = hole.getShotList().listIterator();
-        while (listIterator.hasNext()) {
-            Shot shot = ((Shot)listIterator.next());
+        for(int i = 0; i < hole.getShotList().size(); i++){
+            Shot shot = hole.getShotList().get(i);
 
             double shotLatitude = shot.getShotLatitude();
             double shotLongitude = shot.getShotLongitude();
@@ -33,13 +32,17 @@ public class ShotScore {
     }
 
     public static void calculateFinalShotScore(Hole hole){
-        Log.i("TAG","ShotScore - calculateFInalShotScoreStarted");
-        ListIterator listIterator = hole.getShotList().listIterator();
-        while (listIterator.hasPrevious()) {
-            Shot shot = ((Shot)listIterator.next());
-            double score1 = shot.getShotDifficultyRating();
+        Log.i("TAG","ShotScore - calculateFinalShotScoreStarted");
+        int size = hole.getShotList().size();
+        Log.i("TAG","ShotScore - size: " + size);
+        for(int i = size - 1; i > 0; i--){
+            Shot shot = hole.getShotList().get(i);
+            Shot previousShot = hole.getShotList().get(i -1);
+            double score1 = previousShot.getShotDifficultyRating();
             double score2 = shot.getShotDifficultyRating();
-            double score = score2 - score1;
+            Log.i("TAG","ShotScore - score1: " + score1);
+            Log.i("TAG","ShotScore - score2: " + score2);
+            double score = (score1 - score2) - 1;
             Log.i("TAG","ShotScore - finalShotScore is: " + score);
             shot.setShotScore(score);
         }

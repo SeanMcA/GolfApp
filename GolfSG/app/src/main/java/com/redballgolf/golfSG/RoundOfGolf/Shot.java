@@ -69,6 +69,10 @@ public class Shot implements Parcelable{
         return shotNumber;
     }
 
+    public static void resetShotNumber(){
+        Shot.shotNumber = 1;
+    }
+
 
 
     //PARCELABLE CODE.

@@ -14,7 +14,7 @@ public class Hole implements Parcelable{
     private static int holeNumber = 1;
 
     public Hole() {
-        shotList = new LinkedList<>();
+        shotList = new ArrayList<>();
     }
 
     public ArrayList getHoleSummary() {
@@ -44,10 +44,13 @@ public class Hole implements Parcelable{
         return holeNumber;
     }
 
-
+    public static void incrementHoleNumber() {
+        Hole.holeNumber++;
+    }
 
     //PARCELABLE CODE.
     protected Hole(Parcel in) {
+
         shotList = in.createTypedArrayList(Shot.CREATOR);
     }
 

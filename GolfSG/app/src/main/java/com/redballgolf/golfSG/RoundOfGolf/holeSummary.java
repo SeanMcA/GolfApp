@@ -20,6 +20,7 @@ public class HoleSummary extends BaseActivity {
     private String shot_score;
     static TableLayout tableLayout;
     private Hole hole;
+    private Round round;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +33,7 @@ public class HoleSummary extends BaseActivity {
 
         Intent intent = getIntent();
         hole = intent.getExtras().getParcelable("Hole");
+        round = intent.getExtras().getParcelable("Round");
 
         tableLayout = (TableLayout) findViewById(R.id.tablelayout);
         TableRow rowHeader = getRowHeaders();
@@ -97,6 +99,9 @@ public class HoleSummary extends BaseActivity {
 
     public void returnToMain(View view){
         Intent intentReturnToMain = new Intent(HoleSummary.this,ShotInputScreen.class);
+        intentReturnToMain.putExtra("Round", round);
+        Hole.incrementHoleNumber();
+        Shot.resetShotNumber();
         startActivity(intentReturnToMain);
     }
 
