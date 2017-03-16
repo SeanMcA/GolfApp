@@ -13,14 +13,31 @@ public class Shot implements Parcelable{
     private double shotLongitude;
     private String lie;
     private double distanceOfShot;
-    private double shotDifficultyRating;
+    private double shotDifficultyRating = 0.0;
     private double shotScore;
     private static int shotNumber = 1;
+    private int numOfPutts;
+    private boolean penalty;
+
+    public Shot(String lie, int numOfPutts){
+        this.lie = lie;
+        this.numOfPutts = numOfPutts;
+    }
 
     public Shot(String lie){
         this.lie = lie;
         this.shotLatitude = Coordinates.getLatitude();
         this.shotLongitude = Coordinates.getLongitude();
+    }
+
+
+    //constructor for testing
+    public Shot(Double lat, Double lng, String lie, int numOfPutts, boolean penalty){
+        this.shotLatitude = lat;
+        this.shotLongitude = lng;
+        this.lie = lie;
+        this.numOfPutts = numOfPutts;
+        this.penalty = penalty;
     }
 
     public void addShotToSqlite(Context context){
@@ -53,6 +70,11 @@ public class Shot implements Parcelable{
         return shotScore;
     }
 
+    public boolean isPenalty(){
+        if(penalty){return true;}
+        return false;
+    }
+
     public void setDistanceOfShot(double distanceOfShot) {
         this.distanceOfShot = distanceOfShot;
     }
@@ -73,7 +95,13 @@ public class Shot implements Parcelable{
         Shot.shotNumber = 1;
     }
 
+    public int getNumOfPutts() {
+        return numOfPutts;
+    }
 
+    public void setNumOfPutts(int numOfPutts) {
+        this.numOfPutts = numOfPutts;
+    }
 
     //PARCELABLE CODE.
     protected Shot(Parcel in) {
@@ -83,6 +111,8 @@ public class Shot implements Parcelable{
         distanceOfShot = in.readDouble();
         shotDifficultyRating = in.readDouble();
         shotScore = in.readDouble();
+        numOfPutts = in.readInt();
+
     }
 
     public static final Creator<Shot> CREATOR = new Creator<Shot>() {
@@ -110,5 +140,6 @@ public class Shot implements Parcelable{
         dest.writeDouble(distanceOfShot);
         dest.writeDouble(shotDifficultyRating);
         dest.writeDouble(shotScore);
+        dest.writeInt(numOfPutts);
     }
 }

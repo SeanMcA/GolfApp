@@ -13,6 +13,12 @@ public class Flag {
         this.flagLongitude = Coordinates.getLongitude();
     }
 
+    //constructor for testing
+    public Flag(double lat, double lng) {
+        this.flagLatitude = lat;
+        this.flagLongitude = lng;
+    }
+
     public double getFlagLatitude() {
         return flagLatitude;
     }

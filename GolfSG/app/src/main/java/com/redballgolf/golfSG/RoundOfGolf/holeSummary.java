@@ -47,7 +47,7 @@ public class HoleSummary extends BaseActivity {
         rowHeader.setBackgroundColor(Color.parseColor("#c0c0c0"));
         rowHeader.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT,
         TableLayout.LayoutParams.WRAP_CONTENT));
-        String[] headerText = {"Hit From", "Shot Score"};
+        String[] headerText = {"Hit From", "Stroke Score"};
         for(
         String columnHeaders
         :headerText)

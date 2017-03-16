@@ -3,9 +3,6 @@ package com.redballgolf.golfSG.RoundOfGolf;
 
 import android.util.Log;
 
-import java.util.Iterator;
-import java.util.ListIterator;
-
 public class ShotScore {
     private static double shotDifficulty;
     private static int strokeGainedArrayIndex;
@@ -23,38 +20,54 @@ public class ShotScore {
 
             double shotDistance = CalculateDistance.distanceIs(shotLatitude, shotLongitude, flagLatitude, flagLongitude);
             //Log.i("TAG","ShotScore - shotDistance is: " + shotDistance);
-            shot.setDistanceOfShot(shotDistance);
+            if(lie.equals(ShotInputScreen.PUTT)){
+                shotDistance = shotDistance * 3;
+            }
+                shot.setDistanceOfShot(shotDistance);
+
 
             shotDifficulty = getShotDifficulty(shotDistance, lie);
             shot.setShotDifficultyRating(shotDifficulty);
-            Log.i("TAG","ShotScore - shotDifficulty is: " + shotDifficulty);
         }
     }
 
     public static void calculateFinalShotScore(Hole hole){
-        Log.i("TAG","ShotScore - calculateFinalShotScoreStarted");
+        double score;
         int size = hole.getShotList().size();
-        Log.i("TAG","ShotScore - size: " + size);
-        for(int i = size - 1; i > 0; i--){
+        for(int i = 0; i < size; i++){
             Shot shot = hole.getShotList().get(i);
-            Shot previousShot = hole.getShotList().get(i -1);
-            double score1 = previousShot.getShotDifficultyRating();
-            double score2 = shot.getShotDifficultyRating();
-            Log.i("TAG","ShotScore - score1: " + score1);
-            Log.i("TAG","ShotScore - score2: " + score2);
-            double score = (score1 - score2) - 1;
-            Log.i("TAG","ShotScore - finalShotScore is: " + score);
+            if(shot.getLie().equals("Dummy")){
+                break;
+            }else if(shot.getLie().equals(ShotInputScreen.PUTT)){
+                score = shot.getShotDifficultyRating() - (shot.getNumOfPutts());
+            }else{
+                Shot nextShot = hole.getShotList().get(i + 1);
+                double nextShotScore = nextShot.getShotDifficultyRating();
+                double thisShotScore = shot.getShotDifficultyRating();
+                score = (thisShotScore - nextShotScore) - 1;
+                if(shot.isPenalty()){
+                    Shot previousShot = hole.getShotList().get(i - 1);
+                    score = previousShot.getShotScore();
+                    score = score - 1;
+                    previousShot.setShotScore(score);
+                    shot.setShotScore(0);//this is a penalty so set score to 0;
+                    continue;
+                }
+            }
             shot.setShotScore(score);
         }
     }
 
     private static double getShotDifficulty(double shotDistance, String lie){
-        int distance = roundOfDistance(shotDistance);
+        int distance;
         if(lie.equals(ShotInputScreen.PUTT)){
+            distance = roundOfPuttingDistance(shotDistance);
             strokeGainedArrayIndex = getPuttingIndex(distance);
-        }else{
+        }else {
+            distance = roundOfDistance(shotDistance);
             strokeGainedArrayIndex = getArrayIndex(distance);
         }
+//
 
         if(lie.equals(ShotInputScreen.TEESHOTDRIVER)){
             shotDifficulty = StrokesGainedArrays.getTeeDifficulty(strokeGainedArrayIndex);
@@ -70,8 +83,47 @@ public class ShotScore {
             shotDifficulty = StrokesGainedArrays.getPuttDifficulty(strokeGainedArrayIndex);
         }else if(lie.equals(ShotInputScreen.PENALTY)){
             shotDifficulty = 0;
-        }else{shotDifficulty = 200;}
+        }else{shotDifficulty = 0;}
         return shotDifficulty;
+    }
+
+    private static int roundOfPuttingDistance(double distance){
+        int roundedDistance;
+        if(distance <= 3){
+            roundedDistance = 3;
+        }else if(distance <= 4){
+            roundedDistance = 4;
+        }else if(distance <= 5){
+            roundedDistance = 5;
+        }else if(distance <= 6){
+            roundedDistance = 6;
+        }else if(distance <= 7){
+            roundedDistance = 7;
+        }else if(distance <= 8){
+            roundedDistance = 8;
+        }else if(distance <= 9){
+            roundedDistance = 9;
+        }else if(distance <= 10){
+            roundedDistance = 10;
+        }else if(distance <= 15){
+            roundedDistance = 15;
+        }else if(distance <= 20){
+            roundedDistance = 20;
+        }else if(distance <= 30){
+            roundedDistance = 30;
+        }else if(distance <= 40){
+            roundedDistance = 40;
+        }else if(distance <= 50){
+            roundedDistance = 50;
+        }else if(distance <= 60){
+            roundedDistance = 60;
+        }else if(distance <= 90){
+            roundedDistance = 90;
+        }else{
+            roundedDistance = 100;
+        }
+
+        return roundedDistance;
     }
 
     private static int roundOfDistance(double distance){
