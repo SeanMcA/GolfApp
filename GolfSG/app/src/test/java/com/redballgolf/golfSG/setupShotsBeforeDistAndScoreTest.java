@@ -8,7 +8,7 @@ import com.redballgolf.golfSG.RoundOfGolf.Stroke;
 import com.redballgolf.golfSG.RoundOfGolf.ShotInputScreen;
 
 
-public class setupShotsBeforeTest {
+public class setupShotsBeforeDistAndScoreTest {
     Hole hole;
     Flag flag;
     Shot stroke1;
@@ -19,12 +19,12 @@ public class setupShotsBeforeTest {
     Shot stroke6;
 
 
-    public setupShotsBeforeTest(){
+    public setupShotsBeforeDistAndScoreTest(){
         stroke2 = new Stroke(53.1244, -6.1244, ShotInputScreen.TEESHOTDRIVER);//567 yards to flag. Diff is 4.79. Score is -0.57
         stroke3 = new Stroke(53.1254, -6.1254, ShotInputScreen.FAIRWAY);//425 yards to flag. Diff is 4.20. Score is -0.92
         stroke4 = new Stroke(53.1264, -6.1264, ShotInputScreen.RECOVERY);//284 yards to flag. Diff is 4.20. Score is 0.12
         stroke5 = new Stroke(53.1274, -6.1274, ShotInputScreen.FAIRWAY);//142 yards to flag. Diff is 2.98. Score is -0.23
-        stroke6 = new Putt(ShotInputScreen.GREEN, 2);//42.54 feet to flag. Diff is 2.14. Score is ?
+        stroke6 = new Putt(53.1283, -6.1283, ShotInputScreen.GREEN, 2);//42.54 feet to flag. Diff is 2.14. Score is ?
 
         hole = new Hole();
         hole.addShotToList(stroke2);
@@ -64,7 +64,7 @@ public class setupShotsBeforeTest {
         return stroke5;
     }
 
-    public Shot getStroke6() {
-        return stroke6;
+    public Putt getStroke6() {
+        return (Putt)stroke6;
     }
 }

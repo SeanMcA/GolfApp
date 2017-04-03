@@ -31,7 +31,7 @@
                 android:layout_marginRight="5dp"
                 android:background="#FF99CC00"
                 android:text="Penalty"
-                android:onClick="recordShot"
+                android:onClick="penalty"
                 android:elevation="0dp" />
 
             <Button

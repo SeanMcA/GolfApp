@@ -15,7 +15,7 @@ public class Stroke extends Shot implements Parcelable{
         super(in);
     }
 
-    //const for testing
+    //constructor for testing
     public Stroke(double lat, double lng, String lie){
         super(lat, lng, lie);
     }
@@ -39,6 +39,7 @@ public class Stroke extends Shot implements Parcelable{
     public static void setStrokeNumber(int strokeNumber) {
         Stroke.strokeNumber = strokeNumber;
     }
+
 
     @Override
     public int describeContents() {

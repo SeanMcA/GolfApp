@@ -17,16 +17,16 @@ public class ShotTestNoPutt {
 
     @Before
     public void beforeTest(){
-        ShotScore.getAndSetDistanceOfShot(hole, flag);
+        ShotScore.calculateShotDistanceAndDifficulty(hole, flag, false);
     }
 
 
     @Test
     public void isShotDistanceCalcCorrect() throws Exception {
-        assertEquals(567, setup.getStroke2().getDistanceOfShot(), 0.5);
-        assertEquals(425, setup.getStroke3().getDistanceOfShot(), 0.5);
-        assertEquals(284, setup.getStroke4().getDistanceOfShot(), 0.5);
-        assertEquals(142, setup.getStroke5().getDistanceOfShot(), 0.5);
+        assertEquals(580, setup.getStroke2().getDistanceOfShot(), 0.5);
+        assertEquals(440, setup.getStroke3().getDistanceOfShot(), 0.5);
+        assertEquals(300, setup.getStroke4().getDistanceOfShot(), 0.5);
+        assertEquals(160, setup.getStroke5().getDistanceOfShot(), 0.5);
     }
 
 
@@ -40,7 +40,7 @@ public class ShotTestNoPutt {
 
     @Test
     public void isShotScoreCorrect() throws Exception {
-        ShotScore.calculateFinalShotScore(hole);
+        ShotScore.calculateShotScore(hole, false);
         assertEquals(-0.41, setup.getStroke2().getShotScore(), 0.01);
         assertEquals(-1, setup.getStroke3().getShotScore(), 0.01);
         assertEquals(0.22, setup.getStroke4().getShotScore(), 0.01);

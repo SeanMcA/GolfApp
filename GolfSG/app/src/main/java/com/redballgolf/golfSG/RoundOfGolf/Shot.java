@@ -28,6 +28,7 @@ public abstract class Shot implements Parcelable{
     public Shot(Parcel in) {
     }
 
+    //Constructor for testing
     public Shot(double lat, double lng, String lie){
         this.lie = lie;
         this.shotLatitude = lat;

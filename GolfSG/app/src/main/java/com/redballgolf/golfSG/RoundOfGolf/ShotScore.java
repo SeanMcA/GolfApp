@@ -3,16 +3,18 @@ package com.redballgolf.golfSG.RoundOfGolf;
 
 public class ShotScore {
     private static double shotDifficulty;
+    private static double firstPuttDifficulty;
     private static int strokeGainedArrayIndex;
     private static int roundedShotDistance;
     private static int roundedOffDistance;
+    private static int roundedOffPuttingDistance;
     Hole hole;
     Flag flag;
     Putt putt;
 
 
 
-    public static void calculateShotDistanceAndDifficulty(Hole hole, Flag flag){
+    public static void calculateShotDistanceAndDifficulty(Hole hole, Flag flag, boolean isPutt){
         double flagLatitude = flag.getFlagLatitude();
         double flagLongitude = flag.getFlagLongitude();
 
@@ -23,38 +25,55 @@ public class ShotScore {
             String lie = stroke.getLie();
 
             double shotDistance = CalculateDistance.distanceIs(shotLatitude, shotLongitude, flagLatitude, flagLongitude);
-
             roundedOffDistance = roundOffDistance(shotDistance);
             stroke.setDistanceOfShot(roundedOffDistance);
-
             shotDifficulty = getShotDifficulty(roundedOffDistance, lie);
             stroke.setShotDifficultyRating(shotDifficulty);
         }
+        if(isPutt){
+            int puttIndex = (hole.getShotList().size()) - 1;
+            Putt putt = (Putt) hole.getShotList().get(puttIndex);
+            double firstPuttLat = putt.getShotLatitude();
+            double firstPuttLng = putt.getShotLongitude();
+            double firstPuttDistance = CalculateDistance.distanceIs(firstPuttLat, firstPuttLng, flagLatitude, flagLongitude);
+            double firstPuttDistanceInFeet = firstPuttDistance * 3.28084;
+            roundedOffPuttingDistance = roundOffPuttingDistance(firstPuttDistanceInFeet);
+            putt.setDistanceOfShot(roundedOffPuttingDistance);
+            firstPuttDifficulty = getShotDifficulty(roundedOffPuttingDistance, ShotInputScreen.GREEN);
+            putt.setShotDifficultyRating(firstPuttDifficulty);
+        }
+
     }
 
 
-
-
-
-
-    public static void calculateShotScore(Hole hole, Putt putt, boolean isPutt){
-        double score;
+    public static void calculateShotScore(Hole hole,  boolean isPutt){
+        double score = 0;
         int size = hole.getShotList().size();
-        for(int i = 0; i < size; i++){
+        if(isPutt){
+            int puttIndex = (hole.getShotList().size()) - 1;
+            Putt putt = (Putt) hole.getShotList().get(puttIndex);
+            double puttDifficulty = putt.getShotDifficultyRating();
+            int numberOfPutts = putt.getNumberOfPutts();
+            double puttScore = puttDifficulty - numberOfPutts;
+            putt.setShotScore(puttScore);
+        }
+        for(int i = 0; i < size - 1; i++){
             Shot shot = hole.getShotList().get(i);
-            if(isPutt){
-            }else if(shot.getLie().equals(ShotInputScreen.GREEN)){
-                Putt putt = (Putt)hole.getShotList().get(i);
-                score = shot.getShotDifficultyRating() - (putt.getNumberOfPutts());
-            }else{
-                Shot nextStroke = hole.getShotList().get(i + 1);
-                double nextShotScore = nextStroke.getShotDifficultyRating();
-                double thisShotScore = shot.getShotDifficultyRating();
-                score = (thisShotScore - nextShotScore) - 1;
-            }
+            Shot nextStroke = hole.getShotList().get(i + 1);
+            double nextShotDifficultyRating = nextStroke.getShotDifficultyRating();
+            double thisShotDifficultyRating = shot.getShotDifficultyRating();
+            double currentScore = shot.getShotScore();
+            score = (thisShotDifficultyRating - nextShotDifficultyRating) - 1;
+            shot.setShotScore(currentScore + score);
+        }
+        if(!isPutt){
+            Shot shot = hole.getShotList().get(size - 1);
+            score = (shot.getShotDifficultyRating()) - 1;
             shot.setShotScore(score);
         }
     }
+
+
 
     private static double getShotDifficulty(int shotDistance, String lie){
         if(lie.equals(ShotInputScreen.GREEN)){

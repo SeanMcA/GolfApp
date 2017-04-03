@@ -53,7 +53,6 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
     public static final String PENALTY = "Penalty";
     public static final String RECOVERY = "Recovery";
     public static final String GREEN = "Green";
-    public static final String DUMMY = "Dummy";
     private ImageView accuracyView;
     private TextView holeNumberTextview;
     private TextView accuracyTextView;
@@ -134,21 +133,24 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
         alertDialog.show();
     }
 
-
+    public void penalty(Hole thisHole){//need to change Hole hole to View view as arguements after testing!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        int lastShotIndex = (thisHole.getShotList().size()) - 1;
+        Shot lastStroke = thisHole.getShotList().get(lastShotIndex);
+        lastStroke.setShotScore(-1.0);
+    }
 
     public void flagPosition(View view){
         flag = new Flag();
     }
 
     public void holeFinished(View view){
-        ShotScore.calculateShotDistanceAndDifficulty(hole, flag);
         if(isPutt) {
             putt.setNumberOfPutts(numberOfPutts);
-            ShotScore.calculateShotScore(hole, putt, isPutt);
         }else{
             putt = new Putt(place);
-            ShotScore.calculateShotScore(hole, putt, isPutt);
         }
+        ShotScore.calculateShotDistanceAndDifficulty(hole, flag, isPutt);
+        ShotScore.calculateShotScore(hole, isPutt);
 
 
         Intent goToHoleSummary = new Intent(ShotInputScreen.this,HoleSummary.class);

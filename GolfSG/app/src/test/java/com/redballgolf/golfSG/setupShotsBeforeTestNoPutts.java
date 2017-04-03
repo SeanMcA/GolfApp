@@ -23,14 +23,14 @@ public class setupShotsBeforeTestNoPutts {
         stroke3 = new Stroke(53.1254, -6.1254, ShotInputScreen.FAIRWAY);//425 yards to flag. Diff is 4.20. Score is -0.92
         stroke4 = new Stroke(53.1264, -6.1264, ShotInputScreen.RECOVERY);//284 yards to flag. Diff is 4.20. Score is 0.12
         stroke5 = new Stroke(53.1274, -6.1274, ShotInputScreen.FAIRWAY);//142 yards to flag. Diff is 2.98. Score is 1.98
-        stroke6 = new Stroke(0.0, 0.0, "Dummy");
+        //stroke6 = new Stroke(0.0, 0.0, "Dummy");
 
         hole = new Hole();
         hole.addShotToList(stroke2);
         hole.addShotToList(stroke3);
         hole.addShotToList(stroke4);
         hole.addShotToList(stroke5);
-        hole.addShotToList(stroke6);
+        //hole.addShotToList(stroke6);
 
         flag = new Flag(53.1284, -6.1284);
     }
@@ -63,8 +63,6 @@ public class setupShotsBeforeTestNoPutts {
         return stroke5;
     }
 
-    public Stroke getStroke6() {
-        return stroke6;
-    }
+    //public Stroke getStroke6() { return stroke6;    }
 
 }

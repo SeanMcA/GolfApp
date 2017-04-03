@@ -8,15 +8,15 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
-public class StrokeDistTest {
+public class StrokeDistAndScoreTest {
 
-    setupShotsBeforeTest setup = new setupShotsBeforeTest();
+    setupShotsBeforeDistAndScoreTest setup = new setupShotsBeforeDistAndScoreTest();
     Hole hole = setup.getHole();
     Flag flag = setup.getFlag();
 
     @Before
     public void beforeTest(){
-        ShotScore.getAndSetDistanceOfShot(hole, flag);
+        ShotScore.calculateShotDistanceAndDifficulty(hole, flag, true);
     }
 
 
@@ -41,7 +41,7 @@ public class StrokeDistTest {
 
     @Test
     public void isShotScoreCorrect() throws Exception {
-        ShotScore.calculateFinalShotScore(hole);
+        ShotScore.calculateShotScore(hole, true);
         assertEquals(-0.41, setup.getStroke2().getShotScore(), 0.01);
         assertEquals(-1, setup.getStroke3().getShotScore(), 0.01);
         assertEquals(0.22, setup.getStroke4().getShotScore(), 0.01);
