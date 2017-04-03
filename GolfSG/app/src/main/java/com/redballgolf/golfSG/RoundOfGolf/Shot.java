@@ -8,7 +8,7 @@ import android.os.Parcelable;
 import com.redballgolf.golfSG.GPS.Coordinates;
 import com.redballgolf.golfSG.SQLite.DatabaseHelper;
 
-public class Shot implements Parcelable{
+public abstract class Shot implements Parcelable{
     private double shotLatitude;
     private double shotLongitude;
     private String lie;
@@ -16,28 +16,22 @@ public class Shot implements Parcelable{
     private double shotDifficultyRating = 0.0;
     private double shotScore;
     private static int shotNumber = 1;
-    private int numOfPutts;
-    private boolean penalty;
-
-    public Shot(String lie, int numOfPutts){
-        this.lie = lie;
-        this.numOfPutts = numOfPutts;
-    }
+    private static int holeNumber;
 
     public Shot(String lie){
         this.lie = lie;
         this.shotLatitude = Coordinates.getLatitude();
         this.shotLongitude = Coordinates.getLongitude();
+        this.holeNumber = Hole.getHoleNumber();
     }
 
+    public Shot(Parcel in) {
+    }
 
-    //constructor for testing
-    public Shot(Double lat, Double lng, String lie, int numOfPutts, boolean penalty){
+    public Shot(double lat, double lng, String lie){
+        this.lie = lie;
         this.shotLatitude = lat;
         this.shotLongitude = lng;
-        this.lie = lie;
-        this.numOfPutts = numOfPutts;
-        this.penalty = penalty;
     }
 
     public void addShotToSqlite(Context context){
@@ -45,6 +39,7 @@ public class Shot implements Parcelable{
         dbHandler.addShotToDB(shotLatitude, shotLongitude, lie, Hole.getHoleNumber(), getShotNumber(), Round.getRoundID());
         shotNumber++;
     }
+
 
     public double getShotLatitude() {
         return shotLatitude;
@@ -70,10 +65,6 @@ public class Shot implements Parcelable{
         return shotScore;
     }
 
-    public boolean isPenalty(){
-        if(penalty){return true;}
-        return false;
-    }
 
     public void setDistanceOfShot(double distanceOfShot) {
         this.distanceOfShot = distanceOfShot;
@@ -95,51 +86,4 @@ public class Shot implements Parcelable{
         Shot.shotNumber = 1;
     }
 
-    public int getNumOfPutts() {
-        return numOfPutts;
-    }
-
-    public void setNumOfPutts(int numOfPutts) {
-        this.numOfPutts = numOfPutts;
-    }
-
-    //PARCELABLE CODE.
-    protected Shot(Parcel in) {
-        shotLatitude = in.readDouble();
-        shotLongitude = in.readDouble();
-        lie = in.readString();
-        distanceOfShot = in.readDouble();
-        shotDifficultyRating = in.readDouble();
-        shotScore = in.readDouble();
-        numOfPutts = in.readInt();
-
-    }
-
-    public static final Creator<Shot> CREATOR = new Creator<Shot>() {
-        @Override
-        public Shot createFromParcel(Parcel in) {
-            return new Shot(in);
-        }
-
-        @Override
-        public Shot[] newArray(int size) {
-            return new Shot[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeDouble(shotLatitude);
-        dest.writeDouble(shotLongitude);
-        dest.writeString(lie);
-        dest.writeDouble(distanceOfShot);
-        dest.writeDouble(shotDifficultyRating);
-        dest.writeDouble(shotScore);
-        dest.writeInt(numOfPutts);
-    }
 }

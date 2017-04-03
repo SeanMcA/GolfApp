@@ -57,7 +57,7 @@
                 android:layout_marginRight="5dp"
                 android:background="#FF99CC00"
                 android:text="FLAG"
-                android:onClick="goToHoleSummary"
+                android:onClick="flagPosition"
                 android:elevation="0dp" />
 
 
@@ -76,18 +76,25 @@
             <TextView
                 android:id="@+id/distanceToGreen"
                 android:layout_width="0dp"
-                android:layout_weight="0.33"
-                android:layout_height="wrap_content"/>
+                android:layout_weight="0.25"
+                android:layout_height="50dp"/>
 
             <TextView
                 android:id="@+id/accuracy"
                 android:layout_width="0dp"
-                android:layout_weight="0.33"
-                android:layout_height="wrap_content" />
+                android:layout_weight="0.25"
+                android:layout_height="50dp" />
+
+            <Button
+                android:id="@+id/finishHole"
+                android:layout_width="0dp"
+                android:layout_weight="0.25"
+                android:layout_height="50dp"
+                android:onClick="holeFinished"/>
 
             <Spinner
                 android:layout_width="0dp"
-                android:layout_weight="0.33"
+                android:layout_weight="0.25"
                 android:layout_height="50dp"
                 android:id="@+id/puttSpinner"
                 android:layout_gravity="center_horizontal" />

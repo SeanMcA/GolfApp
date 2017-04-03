@@ -52,12 +52,17 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
     public static final String SAND = "Sand";
     public static final String PENALTY = "Penalty";
     public static final String RECOVERY = "Recovery";
-    public static final String PUTT = "First putt";
+    public static final String GREEN = "Green";
+    public static final String DUMMY = "Dummy";
     private ImageView accuracyView;
     private TextView holeNumberTextview;
     private TextView accuracyTextView;
     private Round round;
     Hole hole;
+    Flag flag;
+    Putt putt;
+    Shot stroke;
+    private boolean isPutt = false;
 
 
     @Override
@@ -84,14 +89,11 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
             round.addHoleToRound(hole);
         }
 
-
-
         accuracyView = (ImageView)findViewById(R.id.gps_image);
         accuracyTextView = (TextView)findViewById(R.id.accuracy);
 
         holeNumberTextview = (TextView) findViewById(R.id.hole_number);
         displayHoleAndShotNumber();
-
 
         disableButtonsUntilGpsAccuracyBetterThan3();
         displayDistanceToGreen();
@@ -108,10 +110,19 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
         builder.setCancelable(false);
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                            Shot shot = new Shot(place);
-                            shot.addShotToSqlite(ShotInputScreen.this);
-                            hole.addShotToList(shot);
+                        if(place.equals(ShotInputScreen.GREEN)){
+                            putt = new Putt(place);
+                            isPutt = true;
+                            putt.addShotToSqlite(ShotInputScreen.this);
+                            hole.addShotToList(putt);
                             displayHoleAndShotNumber();
+                        }else {
+                            stroke = new Stroke(place);
+                            stroke.addShotToSqlite(ShotInputScreen.this);
+                            hole.addShotToList(stroke);
+                            displayHoleAndShotNumber();
+                        }
+
                     }
                 });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -123,12 +134,23 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
         alertDialog.show();
     }
 
-    public void goToHoleSummary(View view){
-        Flag flag = new Flag();
-        Shot putts = new Shot("Green", numberOfPutts);
-        Shot dummy = new Shot("Dummy");
-        ShotScore.calculateEachShotOnThis(hole, flag);
-        ShotScore.calculateFinalShotScore(hole);
+
+
+    public void flagPosition(View view){
+        flag = new Flag();
+    }
+
+    public void holeFinished(View view){
+        ShotScore.calculateShotDistanceAndDifficulty(hole, flag);
+        if(isPutt) {
+            putt.setNumberOfPutts(numberOfPutts);
+            ShotScore.calculateShotScore(hole, putt, isPutt);
+        }else{
+            putt = new Putt(place);
+            ShotScore.calculateShotScore(hole, putt, isPutt);
+        }
+
+
         Intent goToHoleSummary = new Intent(ShotInputScreen.this,HoleSummary.class);
         goToHoleSummary.putExtra("Hole", hole);
         goToHoleSummary.putExtra("Round", round);
@@ -144,7 +166,7 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
     }
 
     private void displayHoleAndShotNumber(){
-        holeNumberTextview.setText("Hole: " + hole.getHoleNumber() + " - Stroke: " + Shot.getShotNumber());
+        holeNumberTextview.setText("Hole: " + hole.getHoleNumber() + " - Stroke: " + Stroke.getStrokeNumber());
     }
 
     @Override
@@ -248,7 +270,7 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
                 place = ShotInputScreen.PENALTY;
                 break;
             case R.id.firstPutt:
-                place = ShotInputScreen.PUTT;
+                place = ShotInputScreen.GREEN;
                 break;
         }
         return place;

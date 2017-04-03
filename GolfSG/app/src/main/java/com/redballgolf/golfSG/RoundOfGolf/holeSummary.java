@@ -101,7 +101,7 @@ public class HoleSummary extends BaseActivity {
         Intent intentReturnToMain = new Intent(HoleSummary.this,ShotInputScreen.class);
         intentReturnToMain.putExtra("Round", round);
         Hole.incrementHoleNumber();
-        Shot.resetShotNumber();
+        Stroke.resetShotNumber();
         startActivity(intentReturnToMain);
     }
 

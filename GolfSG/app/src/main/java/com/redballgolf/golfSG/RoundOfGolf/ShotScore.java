@@ -1,71 +1,66 @@
 package com.redballgolf.golfSG.RoundOfGolf;
 
 
-import android.util.Log;
-
 public class ShotScore {
     private static double shotDifficulty;
     private static int strokeGainedArrayIndex;
+    private static int roundedShotDistance;
+    private static int roundedOffDistance;
+    Hole hole;
+    Flag flag;
+    Putt putt;
 
-    public static void calculateEachShotOnThis(Hole hole, Flag flag){
+
+
+    public static void calculateShotDistanceAndDifficulty(Hole hole, Flag flag){
         double flagLatitude = flag.getFlagLatitude();
         double flagLongitude = flag.getFlagLongitude();
 
-        for(int i = 0; i < hole.getShotList().size(); i++){
-            Shot shot = hole.getShotList().get(i);
-
-            double shotLatitude = shot.getShotLatitude();
-            double shotLongitude = shot.getShotLongitude();
-            String lie = shot.getLie();
+        for(int i = 0; i < hole.getShotList().size(); i++) {
+            Shot stroke = hole.getShotList().get(i);
+            double shotLatitude = stroke.getShotLatitude();
+            double shotLongitude = stroke.getShotLongitude();
+            String lie = stroke.getLie();
 
             double shotDistance = CalculateDistance.distanceIs(shotLatitude, shotLongitude, flagLatitude, flagLongitude);
-            //Log.i("TAG","ShotScore - shotDistance is: " + shotDistance);
-            if(lie.equals(ShotInputScreen.PUTT)){
-                shotDistance = shotDistance * 3;
-            }
-                shot.setDistanceOfShot(shotDistance);
 
+            roundedOffDistance = roundOffDistance(shotDistance);
+            stroke.setDistanceOfShot(roundedOffDistance);
 
-            shotDifficulty = getShotDifficulty(shotDistance, lie);
-            shot.setShotDifficultyRating(shotDifficulty);
+            shotDifficulty = getShotDifficulty(roundedOffDistance, lie);
+            stroke.setShotDifficultyRating(shotDifficulty);
         }
     }
 
-    public static void calculateFinalShotScore(Hole hole){
+
+
+
+
+
+    public static void calculateShotScore(Hole hole, Putt putt, boolean isPutt){
         double score;
         int size = hole.getShotList().size();
         for(int i = 0; i < size; i++){
             Shot shot = hole.getShotList().get(i);
-            if(shot.getLie().equals("Dummy")){
-                break;
-            }else if(shot.getLie().equals(ShotInputScreen.PUTT)){
-                score = shot.getShotDifficultyRating() - (shot.getNumOfPutts());
+            if(isPutt){
+            }else if(shot.getLie().equals(ShotInputScreen.GREEN)){
+                Putt putt = (Putt)hole.getShotList().get(i);
+                score = shot.getShotDifficultyRating() - (putt.getNumberOfPutts());
             }else{
-                Shot nextShot = hole.getShotList().get(i + 1);
-                double nextShotScore = nextShot.getShotDifficultyRating();
+                Shot nextStroke = hole.getShotList().get(i + 1);
+                double nextShotScore = nextStroke.getShotDifficultyRating();
                 double thisShotScore = shot.getShotDifficultyRating();
                 score = (thisShotScore - nextShotScore) - 1;
-                if(shot.isPenalty()){
-                    Shot previousShot = hole.getShotList().get(i - 1);
-                    score = previousShot.getShotScore();
-                    score = score - 1;
-                    previousShot.setShotScore(score);
-                    shot.setShotScore(0);//this is a penalty so set score to 0;
-                    continue;
-                }
             }
             shot.setShotScore(score);
         }
     }
 
-    private static double getShotDifficulty(double shotDistance, String lie){
-        int distance;
-        if(lie.equals(ShotInputScreen.PUTT)){
-            distance = roundOfPuttingDistance(shotDistance);
-            strokeGainedArrayIndex = getPuttingIndex(distance);
+    private static double getShotDifficulty(int shotDistance, String lie){
+        if(lie.equals(ShotInputScreen.GREEN)){
+            strokeGainedArrayIndex = getPuttingIndex(shotDistance);
         }else {
-            distance = roundOfDistance(shotDistance);
-            strokeGainedArrayIndex = getArrayIndex(distance);
+            strokeGainedArrayIndex = getArrayIndex(shotDistance);
         }
 //
 
@@ -79,7 +74,7 @@ public class ShotScore {
             shotDifficulty = StrokesGainedArrays.getSandDifficulty(strokeGainedArrayIndex);
         }else if(lie.equals(ShotInputScreen.RECOVERY)){
             shotDifficulty = StrokesGainedArrays.getRecoveryDifficulty(strokeGainedArrayIndex);
-        }else if(lie.equals(ShotInputScreen.PUTT)){
+        }else if(lie.equals(ShotInputScreen.GREEN)){
             shotDifficulty = StrokesGainedArrays.getPuttDifficulty(strokeGainedArrayIndex);
         }else if(lie.equals(ShotInputScreen.PENALTY)){
             shotDifficulty = 0;
@@ -87,7 +82,7 @@ public class ShotScore {
         return shotDifficulty;
     }
 
-    private static int roundOfPuttingDistance(double distance){
+    private static int roundOffPuttingDistance(double distance){
         int roundedDistance;
         if(distance <= 3){
             roundedDistance = 3;
@@ -122,11 +117,10 @@ public class ShotScore {
         }else{
             roundedDistance = 100;
         }
-
         return roundedDistance;
     }
 
-    private static int roundOfDistance(double distance){
+    private static int roundOffDistance(double distance){
         double roundedDistanceDouble = (distance + 20) - (distance % 20);
         int roundedDistance = (int) roundedDistanceDouble;
         return roundedDistance;
