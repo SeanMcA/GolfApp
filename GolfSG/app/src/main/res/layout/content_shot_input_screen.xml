@@ -90,6 +90,8 @@
                 android:layout_width="0dp"
                 android:layout_weight="0.25"
                 android:layout_height="50dp"
+                android:background="#FF99CC00"
+                android:text="Finish Hole"
                 android:onClick="holeFinished"/>
 
             <Spinner

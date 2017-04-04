@@ -16,21 +16,6 @@ public class Hole implements Parcelable{
         shotList = new ArrayList<>();
     }
 
-    protected Hole(Parcel in) {
-    }
-
-    public static final Creator<Hole> CREATOR = new Creator<Hole>() {
-        @Override
-        public Hole createFromParcel(Parcel in) {
-            return new Hole(in);
-        }
-
-        @Override
-        public Hole[] newArray(int size) {
-            return new Hole[size];
-        }
-    };
-
     public ArrayList getHoleSummary() {
         ArrayList holeSummary = new ArrayList();
         Iterator listIterator = shotList.listIterator();
@@ -62,6 +47,23 @@ public class Hole implements Parcelable{
         Hole.holeNumber++;
     }
 
+
+
+    //PARCELABLE CODE
+    protected Hole(Parcel in) {
+    }
+
+    public static final Creator<Hole> CREATOR = new Creator<Hole>() {
+        @Override
+        public Hole createFromParcel(Parcel in) {
+            return new Hole(in);
+        }
+
+        @Override
+        public Hole[] newArray(int size) {
+            return new Hole[size];
+        }
+    };
 
     @Override
     public int describeContents() {

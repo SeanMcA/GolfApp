@@ -21,6 +21,8 @@ public class HoleSummary extends BaseActivity {
     static TableLayout tableLayout;
     private Hole hole;
     private Round round;
+    private boolean isPutt;
+    private Putt putt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +35,12 @@ public class HoleSummary extends BaseActivity {
 
         Intent intent = getIntent();
         hole = intent.getExtras().getParcelable("Hole");
+        //intent.getExtras().getParcelable("Hole");Why not???????????
         round = intent.getExtras().getParcelable("Round");
+        intent.putExtra("isPutt", isPutt);
+        if(isPutt){
+            putt = intent.getExtras().getParcelable("Putt");
+        }
 
         tableLayout = (TableLayout) findViewById(R.id.tablelayout);
         TableRow rowHeader = getRowHeaders();
@@ -73,6 +80,10 @@ public class HoleSummary extends BaseActivity {
             hit_from = holeSummaryData.get(i);
             shot_score = holeSummaryData.get(i + 1);
             displaySummaryDataInTable(tableLayout, hit_from, shot_score);
+        }
+        if(isPutt){
+            String puttScore = String.valueOf(putt.getShotScore());
+            displaySummaryDataInTable(tableLayout, ShotInputScreen.GREEN, puttScore);
         }
     }
 

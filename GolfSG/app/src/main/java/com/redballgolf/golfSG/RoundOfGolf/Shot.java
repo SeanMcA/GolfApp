@@ -4,6 +4,7 @@ package com.redballgolf.golfSG.RoundOfGolf;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.redballgolf.golfSG.GPS.Coordinates;
 import com.redballgolf.golfSG.SQLite.DatabaseHelper;
@@ -36,6 +37,7 @@ public abstract class Shot implements Parcelable{
     }
 
     public void addShotToSqlite(Context context){
+        Log.i("TAG", "Logging shot to SQLite db");
         DatabaseHelper dbHandler = new DatabaseHelper(context);
         dbHandler.addShotToDB(shotLatitude, shotLongitude, lie, Hole.getHoleNumber(), getShotNumber(), Round.getRoundID());
         shotNumber++;

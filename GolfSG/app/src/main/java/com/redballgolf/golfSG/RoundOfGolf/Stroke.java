@@ -5,19 +5,22 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Stroke extends Shot implements Parcelable{
-    private static int strokeNumber = 1;
+    //private static int strokeNumber = 1;
 
     public Stroke(String lie){
         super(lie);
     }
 
-    protected Stroke(Parcel in) {
-        super(in);
-    }
+
 
     //constructor for testing
     public Stroke(double lat, double lng, String lie){
         super(lat, lng, lie);
+    }
+
+    //PARCELABLE CODE
+    protected Stroke(Parcel in) {
+        super(in);
     }
 
     public static final Creator<Stroke> CREATOR = new Creator<Stroke>() {
@@ -31,15 +34,6 @@ public class Stroke extends Shot implements Parcelable{
             return new Stroke[size];
         }
     };
-
-    public static int getStrokeNumber() {
-        return strokeNumber;
-    }
-
-    public static void setStrokeNumber(int strokeNumber) {
-        Stroke.strokeNumber = strokeNumber;
-    }
-
 
     @Override
     public int describeContents() {

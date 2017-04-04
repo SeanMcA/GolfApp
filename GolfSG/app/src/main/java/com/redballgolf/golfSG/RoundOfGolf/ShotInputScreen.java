@@ -62,6 +62,7 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
     Putt putt;
     Shot stroke;
     private boolean isPutt = false;
+    private boolean shotRecorded = false;
 
 
     @Override
@@ -110,12 +111,14 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if(place.equals(ShotInputScreen.GREEN)){
+                            Log.i("TAG", "recording shot from the green");
                             putt = new Putt(place);
                             isPutt = true;
                             putt.addShotToSqlite(ShotInputScreen.this);
                             hole.addShotToList(putt);
                             displayHoleAndShotNumber();
                         }else {
+                            Log.i("TAG", "recording shot from OFF the green");
                             stroke = new Stroke(place);
                             stroke.addShotToSqlite(ShotInputScreen.this);
                             hole.addShotToList(stroke);
@@ -133,31 +136,53 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
         alertDialog.show();
     }
 
-    public void penalty(Hole thisHole){//need to change Hole hole to View view as arguements after testing!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        int lastShotIndex = (thisHole.getShotList().size()) - 1;
-        Shot lastStroke = thisHole.getShotList().get(lastShotIndex);
+    public void penalty(View view){
+        int lastShotIndex = (hole.getShotList().size()) - 1;
+        Shot lastStroke = hole.getShotList().get(lastShotIndex);
         lastStroke.setShotScore(-1.0);
     }
 
     public void flagPosition(View view){
-        flag = new Flag();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Are you sure you want to record Flag at this position?");
+        builder.setCancelable(false);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                flag = new Flag();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     public void holeFinished(View view){
-        if(isPutt) {
-            putt.setNumberOfPutts(numberOfPutts);
-        }else{
-            putt = new Putt(place);
+        Log.i("TAG", "holeFinished started");
+        if(!shotRecorded){
+            Shot dummyShot = new Stroke(0.0, 0.0, TEESHOTDRIVER);
         }
-        ShotScore.calculateShotDistanceAndDifficulty(hole, flag, isPutt);
-        ShotScore.calculateShotScore(hole, isPutt);
+            if (isPutt) {
+                putt.setNumberOfPutts(numberOfPutts);
+            } else {
+                putt = new Putt(place);
+            }
+            ShotScore.calculateShotDistanceAndDifficulty(hole, flag, isPutt);
+            ShotScore.calculateShotScore(hole, isPutt);
 
 
-        Intent goToHoleSummary = new Intent(ShotInputScreen.this,HoleSummary.class);
-        goToHoleSummary.putExtra("Hole", hole);
-        goToHoleSummary.putExtra("Round", round);
-        Log.i("TAG","ShotInputScreen - shot scores calculated");
-        startActivity(goToHoleSummary);
+            Intent goToHoleSummary = new Intent(ShotInputScreen.this, HoleSummary.class);
+            goToHoleSummary.putExtra("Hole", hole);
+            goToHoleSummary.putExtra("Round", round);
+            goToHoleSummary.putExtra("isPutt", isPutt);
+            if (isPutt) {
+                goToHoleSummary.putExtra("Putt", putt);
+            }
+            Log.i("TAG", "ShotInputScreen - shot scores calculated");
+            startActivity(goToHoleSummary);
     }
 
     private void displayDistanceToGreen(){
@@ -168,7 +193,7 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
     }
 
     private void displayHoleAndShotNumber(){
-        holeNumberTextview.setText("Hole: " + hole.getHoleNumber() + " - Stroke: " + Stroke.getStrokeNumber());
+        holeNumberTextview.setText("Hole: " + hole.getHoleNumber() + " - Stroke: " + Stroke.getShotNumber());
     }
 
     @Override
@@ -285,19 +310,19 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
         // Spinner click listener
         spinner.setOnItemSelectedListener(this);
         // Spinner Drop down elements
-        List<String> categories = new ArrayList<>();
-        categories.add("0");
-        categories.add("1");
-        categories.add("2");
-        categories.add("3");
-        categories.add("4");
-        categories.add("5");
-        categories.add("6");
-        categories.add("7");
+        List<Integer> categories = new ArrayList<>();
+        categories.add(0);
+        categories.add(1);
+        categories.add(2);
+        categories.add(3);
+        categories.add(4);
+        categories.add(5);
+        categories.add(6);
+        categories.add(7);
 
 
         // Creating adapter for spinner
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
+        ArrayAdapter<Integer> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
 
         // Drop down layout style - list view with radio button
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

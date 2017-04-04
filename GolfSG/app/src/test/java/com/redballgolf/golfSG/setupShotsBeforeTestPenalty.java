@@ -26,8 +26,8 @@ public class setupShotsBeforeTestPenalty {
         stroke2 = new Stroke(53.1254, -6.1254, ShotInputScreen.FAIRWAY);//425 yards to flag. Diff is 4.20. Score is -2.0
         hole.addShotToList(stroke2);
 
-        ShotInputScreen sis = new ShotInputScreen();
-        sis.penalty(hole);
+//        ShotInputScreen sis = new ShotInputScreen();
+//        sis.penalty(hole);
 
         stroke3 = new Stroke(53.1254, -6.1254, ShotInputScreen.FAIRWAY);//425 yards to flag. Diff is 4.20. Score is 0.22
         hole.addShotToList(stroke3);
