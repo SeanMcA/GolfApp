@@ -34,10 +34,9 @@ public class HoleSummary extends BaseActivity {
         holeSummaryHeader.setText("Hole " + Hole.getHoleNumber());
 
         Intent intent = getIntent();
-        hole = intent.getExtras().getParcelable("Hole");
-        //intent.getExtras().getParcelable("Hole");Why not???????????
+        hole = intent.getExtras().getParcelable("Hole");//error here!!!!!!!!!!!!!!!!!!!!!
         round = intent.getExtras().getParcelable("Round");
-        intent.putExtra("isPutt", isPutt);
+        isPutt = intent.getBooleanExtra("isPutt", isPutt);
         if(isPutt){
             putt = intent.getExtras().getParcelable("Putt");
         }

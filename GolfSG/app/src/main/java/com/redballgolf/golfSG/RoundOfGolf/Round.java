@@ -10,11 +10,11 @@ import java.util.List;
 
 public class Round implements Parcelable{
     private int playerID;
-    private List holeList;
+    private List<Hole> holeList;
     private static int roundID;
 
     public Round(int roundID){
-        holeList = new LinkedList<>();
+        holeList = new ArrayList<>();
         this.roundID = roundID;
     }
 
@@ -36,7 +36,9 @@ public class Round implements Parcelable{
     protected Round(Parcel in) {
         playerID = in.readInt();
         roundID = in.readInt();
-        holeList = in.createTypedArrayList(Round.CREATOR);
+        //holeList = in.createTypedArrayList(Round.CREATOR);//Error here at the moment!!!!!
+        this.holeList = new LinkedList<>();
+        in.readList(holeList, Round.class.getClassLoader());
     }
 
 
@@ -62,6 +64,6 @@ public class Round implements Parcelable{
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(playerID);
         dest.writeInt(roundID);
-        dest.writeTypedList(holeList);
+        dest.writeList(holeList);
     }
 }

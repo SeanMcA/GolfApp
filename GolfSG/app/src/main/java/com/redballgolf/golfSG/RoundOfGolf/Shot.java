@@ -26,8 +26,7 @@ public abstract class Shot implements Parcelable{
         this.holeNumber = Hole.getHoleNumber();
     }
 
-    public Shot(Parcel in) {
-    }
+
 
     //Constructor for testing
     public Shot(double lat, double lng, String lie){
@@ -88,5 +87,32 @@ public abstract class Shot implements Parcelable{
     public static void resetShotNumber(){
         Shot.shotNumber = 1;
     }
+
+
+    //PARCELABLE CODE
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeDouble(this.shotLatitude);
+        dest.writeDouble(this.shotLongitude);
+        dest.writeString(this.lie);
+        dest.writeDouble(this.distanceOfShot);
+        dest.writeDouble(this.shotDifficultyRating);
+        dest.writeDouble(this.shotScore);
+    }
+
+    protected Shot(Parcel in) {
+        this.shotLatitude = in.readDouble();
+        this.shotLongitude = in.readDouble();
+        this.lie = in.readString();
+        this.distanceOfShot = in.readDouble();
+        this.shotDifficultyRating = in.readDouble();
+        this.shotScore = in.readDouble();
+    }
+
 
 }

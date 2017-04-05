@@ -5,7 +5,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 
-public class Putt extends Shot  implements Parcelable{
+public class Putt extends Shot{
     private int numberOfPutts;
 
     public Putt(String lie){
@@ -19,24 +19,6 @@ public class Putt extends Shot  implements Parcelable{
         this.numberOfPutts = numberOfPutts;
     }
 
-
-    protected Putt(Parcel in) {
-        super(in);
-        numberOfPutts = in.readInt();
-    }
-
-    public static final Creator<Putt> CREATOR = new Creator<Putt>() {
-        @Override
-        public Putt createFromParcel(Parcel in) {
-            return new Putt(in);
-        }
-
-        @Override
-        public Putt[] newArray(int size) {
-            return new Putt[size];
-        }
-    };
-
     public void setNumberOfPutts(int numberOfPutts) {
         this.numberOfPutts = numberOfPutts;
     }
@@ -45,8 +27,7 @@ public class Putt extends Shot  implements Parcelable{
         return numberOfPutts;
     }
 
-
-
+   //PARCELABLE CODE
 
     @Override
     public int describeContents() {
@@ -55,6 +36,24 @@ public class Putt extends Shot  implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(numberOfPutts);
+        super.writeToParcel(dest, flags);
+        dest.writeInt(this.numberOfPutts);
     }
+
+    protected Putt(Parcel in) {
+        super(in);
+        this.numberOfPutts = in.readInt();
+    }
+
+    public static final Creator<Putt> CREATOR = new Creator<Putt>() {
+        @Override
+        public Putt createFromParcel(Parcel source) {
+            return new Putt(source);
+        }
+
+        @Override
+        public Putt[] newArray(int size) {
+            return new Putt[size];
+        }
+    };
 }

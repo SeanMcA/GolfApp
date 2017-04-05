@@ -6,6 +6,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Hole implements Parcelable{
@@ -15,6 +16,8 @@ public class Hole implements Parcelable{
     public Hole() {
         shotList = new ArrayList<>();
     }
+
+
 
     public ArrayList getHoleSummary() {
         ArrayList holeSummary = new ArrayList();
@@ -49,8 +52,13 @@ public class Hole implements Parcelable{
 
 
 
-    //PARCELABLE CODE
+
+
     protected Hole(Parcel in) {
+        this.shotList = new LinkedList<>();
+        //in.readList(shotList, List.class.getClassLoader());
+        in.readList(shotList, Hole.class.getClassLoader());
+
     }
 
     public static final Creator<Hole> CREATOR = new Creator<Hole>() {
@@ -72,5 +80,36 @@ public class Hole implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeList(shotList);
     }
+
+
+    //PARCELABLE CODE
+//    @Override
+//    public int describeContents() {
+//        return 0;
+//    }
+//
+//    @Override
+//    public void writeToParcel(Parcel dest, int flags) {
+//        dest.writeTypedList(shotList);
+//    }
+//
+//    protected Hole(Parcel in) {
+//        this.shotList = new LinkedList<>();
+//        in.readList(shotList, List.class.getClassLoader() );
+//    }
+//
+//    public static final Creator<Hole> CREATOR = new Creator<Hole>() {
+//        @Override
+//        public Hole createFromParcel(Parcel in) {
+//            return new Hole(in);
+//        }
+//
+//        @Override
+//        public Hole[] newArray(int size) {
+//            return new Hole[size];
+//        }
+//    };
+
 }
