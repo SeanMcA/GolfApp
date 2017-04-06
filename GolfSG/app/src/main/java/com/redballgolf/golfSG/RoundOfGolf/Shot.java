@@ -1,6 +1,7 @@
 package com.redballgolf.golfSG.RoundOfGolf;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -10,6 +11,7 @@ import com.redballgolf.golfSG.GPS.Coordinates;
 import com.redballgolf.golfSG.SQLite.DatabaseHelper;
 
 public abstract class Shot implements Parcelable{
+
     private double shotLatitude;
     private double shotLongitude;
     private String lie;
@@ -27,7 +29,6 @@ public abstract class Shot implements Parcelable{
     }
 
 
-
     //Constructor for testing
     public Shot(double lat, double lng, String lie){
         this.lie = lie;
@@ -42,6 +43,17 @@ public abstract class Shot implements Parcelable{
         shotNumber++;
     }
 
+
+    public void addShotDistanceToSqlite(Context context, double distance, int shotNumber){
+        DatabaseHelper dbHandler = new DatabaseHelper(context);
+        Log.i("TAG", "addShotDistance..holeNO: " + Hole.getHoleNumber() + " shotNo: " + shotNumber);
+        dbHandler.addDistanceToDB(distance, Round.getRoundID(), Hole.getHoleNumber(), shotNumber);
+    }
+
+    public void addShotScoreToSqlite(Context context, double score, int shotNumber){
+        DatabaseHelper dbHandler = new DatabaseHelper(context);
+        dbHandler.addShotScoreToDB(score, Round.getRoundID(), Hole.getHoleNumber(), shotNumber);
+    }
 
     public double getShotLatitude() {
         return shotLatitude;

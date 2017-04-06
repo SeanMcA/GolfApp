@@ -2,13 +2,12 @@ package com.redballgolf.golfSG.RoundOfGolf;
 
 
 import android.os.Parcel;
-import android.os.Parcelable;
 
 public class Stroke extends Shot{
-    //private static int strokeNumber = 1;
-
+    private int strokeNumber;
     public Stroke(String lie){
         super(lie);
+        this.strokeNumber = Shot.getShotNumber();
     }
 
     //constructor for testing
@@ -16,8 +15,9 @@ public class Stroke extends Shot{
         super(lat, lng, lie);
     }
 
-
-
+    public int getStrokeNumber() {
+        return strokeNumber;
+    }
 
     //PARCELABLE CODE
     @Override

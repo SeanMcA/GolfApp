@@ -227,6 +227,36 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void addDistanceToDB(double distance, int roundId, int holeNumber, int shotNumber){
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_SHOT_DISTANCE, distance);
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String round = String.valueOf(roundId);
+        String shot = String.valueOf(shotNumber);
+        String hole = String.valueOf(holeNumber);
+        String[] args = new String[]{round};
+
+        db.update(TABLE_SHOT, values, "round_id = ?", args);
+        db.close();
+    }
+
+
+    public void addShotScoreToDB(double score, int roundId, int holeNumber, int shotNumber){
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_SHOT_SCORE, score);
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String round = String.valueOf(roundId);
+        String shot = String.valueOf(shotNumber);
+        String hole = String.valueOf(holeNumber);
+        String[] args = new String[]{round};
+
+        db.update(TABLE_SHOT, values, "round_id = ?", args);
+        db.close();
+    }
 
     public void addNewRoundToDB(String date, String coursename, String handicap, String userID) {
         //Log.i(TAG, "addNewRoundToDB started");
@@ -303,6 +333,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return roundID;
     }
+
+
 
 }//class
 

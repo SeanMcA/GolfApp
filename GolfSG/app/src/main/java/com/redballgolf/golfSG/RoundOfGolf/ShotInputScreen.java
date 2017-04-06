@@ -170,19 +170,25 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
             } else {
                 putt = new Putt(place);
             }
-            ShotScore.calculateShotDistanceAndDifficulty(hole, flag, isPutt);
-            ShotScore.calculateShotScore(hole, isPutt);
+            ShotScore shotScore = new ShotScore(this);
+            shotScore.calculateShotDistanceAndDifficulty(hole, flag, isPutt);
+            shotScore.calculateShotScore(hole, isPutt);
 
-
-            Intent goToHoleSummary = new Intent(ShotInputScreen.this, HoleSummary.class);
-            goToHoleSummary.putExtra("Hole", hole);
-            goToHoleSummary.putExtra("Round", round);
-            goToHoleSummary.putExtra("isPutt", isPutt);
-            if (isPutt) {
-                goToHoleSummary.putExtra("Putt", putt);
+            if(Hole.getHoleNumber() == 18){
+                Intent goToRoundSummary = new Intent(ShotInputScreen.this, RoundSummary.class);
+                goToRoundSummary.putExtra("Round", round);
+                startActivity(goToRoundSummary);
+            }else {
+                Intent goToHoleSummary = new Intent(ShotInputScreen.this, HoleSummary.class);
+                goToHoleSummary.putExtra("Hole", hole);
+                goToHoleSummary.putExtra("Round", round);
+                goToHoleSummary.putExtra("isPutt", isPutt);
+                if (isPutt) {
+                    goToHoleSummary.putExtra("Putt", putt);
+                }
+                Log.i("TAG", "ShotInputScreen - shot scores calculated");
+                startActivity(goToHoleSummary);
             }
-            Log.i("TAG", "ShotInputScreen - shot scores calculated");
-            startActivity(goToHoleSummary);
     }
 
     private void displayDistanceToGreen(){

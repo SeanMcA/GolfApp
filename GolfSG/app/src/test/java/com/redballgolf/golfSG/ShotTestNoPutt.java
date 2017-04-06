@@ -14,10 +14,11 @@ public class ShotTestNoPutt {
     setupShotsBeforeTestNoPutts setup = new setupShotsBeforeTestNoPutts();
     Hole hole = setup.getHole();
     Flag flag = setup.getFlag();
+    ShotScore shotScore = new ShotScore();
 
     @Before
     public void beforeTest(){
-        ShotScore.calculateShotDistanceAndDifficulty(hole, flag, false);
+        shotScore.calculateShotDistanceAndDifficulty(hole, flag, false);
     }
 
 
@@ -40,7 +41,7 @@ public class ShotTestNoPutt {
 
     @Test
     public void isShotScoreCorrect() throws Exception {
-        ShotScore.calculateShotScore(hole, false);
+        shotScore.calculateShotScore(hole, false);
         assertEquals(-0.41, setup.getStroke2().getShotScore(), 0.01);
         assertEquals(-1, setup.getStroke3().getShotScore(), 0.01);
         assertEquals(0.22, setup.getStroke4().getShotScore(), 0.01);

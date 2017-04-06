@@ -13,10 +13,11 @@ public class StrokeDistAndScoreTest {
     setupShotsBeforeDistAndScoreTest setup = new setupShotsBeforeDistAndScoreTest();
     Hole hole = setup.getHole();
     Flag flag = setup.getFlag();
+    ShotScore shotScore = new ShotScore();
 
     @Before
     public void beforeTest(){
-        ShotScore.calculateShotDistanceAndDifficulty(hole, flag, true);
+        shotScore.calculateShotDistanceAndDifficulty(hole, flag, true);
     }
 
 
@@ -41,7 +42,7 @@ public class StrokeDistAndScoreTest {
 
     @Test
     public void isShotScoreCorrect() throws Exception {
-        ShotScore.calculateShotScore(hole, true);
+        shotScore.calculateShotScore(hole, true);
         assertEquals(-0.41, setup.getStroke2().getShotScore(), 0.01);
         assertEquals(-1, setup.getStroke3().getShotScore(), 0.01);
         assertEquals(0.22, setup.getStroke4().getShotScore(), 0.01);

@@ -13,4 +13,30 @@
     tools:context="com.redballgolf.golfSG.RoundOfGolf.RoundSummary"
     tools:showIn="@layout/activity_round_summary">
 
+    <TextView
+        android:id="@+id/sgPuttingHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Strokes Gained Putting:" />
+
+    <TextView
+        android:id="@+id/sgPuttingTextview"
+        android:layout_below="@+id/sgPuttingHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/sgDrivingHeader"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/sgPuttingTextview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Strokes Gained Driving:" />
+
+    <TextView
+        android:id="@+id/sgDrivingTextview"
+        android:layout_below="@+id/sgDrivingHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </RelativeLayout>

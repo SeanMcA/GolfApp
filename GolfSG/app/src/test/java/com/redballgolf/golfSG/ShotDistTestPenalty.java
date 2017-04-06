@@ -13,10 +13,11 @@ import static org.junit.Assert.assertEquals;
 public class ShotDistTestPenalty { setupShotsBeforeTestPenalty setup = new setupShotsBeforeTestPenalty();
     Hole hole = setup.getHole();
     Flag flag = setup.getFlag();
+    ShotScore shotScore = new ShotScore();
 
     @Before
     public void beforeTest(){
-        ShotScore.calculateShotDistanceAndDifficulty(hole, flag, true);
+        shotScore.calculateShotDistanceAndDifficulty(hole, flag, true);
     }
 
 
@@ -41,7 +42,7 @@ public class ShotDistTestPenalty { setupShotsBeforeTestPenalty setup = new setup
 
     @Test
     public void isShotScoreCorrect() throws Exception {//need to change penalty method to get this to work
-        ShotScore.calculateShotScore(hole, true);
+        shotScore.calculateShotScore(hole, true);
         assertEquals(-0.41, setup.getStroke1().getShotScore(), 0.01);
         assertEquals(-2, setup.getStroke2().getShotScore(), 0.01);
         assertEquals(0.22, setup.getStroke3().getShotScore(), 0.01);

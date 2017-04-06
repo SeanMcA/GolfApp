@@ -1,7 +1,12 @@
 package com.redballgolf.golfSG.RoundOfGolf;
 
 
-public class ShotScore {
+import android.app.Activity;
+import android.app.Application;
+import android.content.Context;
+import android.support.v7.app.AppCompatActivity;
+
+public class ShotScore{
     private static double shotDifficulty;
     private static double firstPuttDifficulty;
     private static int strokeGainedArrayIndex;
@@ -11,10 +16,14 @@ public class ShotScore {
     Hole hole;
     Flag flag;
     Putt putt;
+    Context context;
 
+    public ShotScore(Context context){
+        this.context = context;
+    }
 
+    public double calculateShotDistanceAndDifficulty(Hole hole, Flag flag, boolean isPutt){
 
-    public static void calculateShotDistanceAndDifficulty(Hole hole, Flag flag, boolean isPutt){
         double flagLatitude = flag.getFlagLatitude();
         double flagLongitude = flag.getFlagLongitude();
 
@@ -29,6 +38,7 @@ public class ShotScore {
             stroke.setDistanceOfShot(roundedOffDistance);
             shotDifficulty = getShotDifficulty(roundedOffDistance, lie);
             stroke.setShotDifficultyRating(shotDifficulty);
+            stroke.addShotDistanceToSqlite(context, shotDistance, i + 1);
         }
         if(isPutt){
             int puttIndex = (hole.getShotList().size()) - 1;
@@ -42,11 +52,11 @@ public class ShotScore {
             firstPuttDifficulty = getShotDifficulty(roundedOffPuttingDistance, ShotInputScreen.GREEN);
             putt.setShotDifficultyRating(firstPuttDifficulty);
         }
-
+        return 0;
     }
 
 
-    public static void calculateShotScore(Hole hole,  boolean isPutt){
+    public void calculateShotScore(Hole hole,  boolean isPutt){
         double score = 0;
         int size = hole.getShotList().size();
         if(isPutt){
@@ -65,6 +75,8 @@ public class ShotScore {
             double currentScore = shot.getShotScore();
             score = (thisShotDifficultyRating - nextShotDifficultyRating) - 1;
             shot.setShotScore(currentScore + score);
+            double finalScore = shot.getShotScore();
+            shot.addShotScoreToSqlite(context, finalScore);
         }
         if(!isPutt){
             Shot shot = hole.getShotList().get(size - 1);
