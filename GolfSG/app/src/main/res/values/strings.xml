@@ -26,4 +26,5 @@
     <string name="title_activity_hole_summary">holeSummary</string>
     <string name="title_activity_round_summary">RoundSummary</string>
     <string name="title_activity_on_the_green">OnTheGreen</string>
+    <string name="title_activity_map_screen">MapScreen</string>
 </resources>

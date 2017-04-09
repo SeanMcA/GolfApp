@@ -1,7 +1,6 @@
 package com.redballgolf.golfSG.RoundOfGolf;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -20,6 +19,7 @@ public abstract class Shot implements Parcelable{
     private double shotScore;
     private static int shotNumber = 1;
     private static int holeNumber;
+    private int sqliteRowNumber;
 
     public Shot(String lie){
         this.lie = lie;
@@ -37,22 +37,26 @@ public abstract class Shot implements Parcelable{
     }
 
     public void addShotToSqlite(Context context){
-        Log.i("TAG", "Logging shot to SQLite db");
+        //Log.i("TAG", "Logging shot to SQLite db");
         DatabaseHelper dbHandler = new DatabaseHelper(context);
         dbHandler.addShotToDB(shotLatitude, shotLongitude, lie, Hole.getHoleNumber(), getShotNumber(), Round.getRoundID());
         shotNumber++;
     }
 
-
-    public void addShotDistanceToSqlite(Context context, double distance, int shotNumber){
+    public void getInsertedRowIdAndUpdateVariable(Context context){
         DatabaseHelper dbHandler = new DatabaseHelper(context);
-        Log.i("TAG", "addShotDistance..holeNO: " + Hole.getHoleNumber() + " shotNo: " + shotNumber);
-        dbHandler.addDistanceToDB(distance, Round.getRoundID(), Hole.getHoleNumber(), shotNumber);
+        this.sqliteRowNumber = dbHandler.getLastInsertedRowId();
     }
 
-    public void addShotScoreToSqlite(Context context, double score, int shotNumber){
+
+    public void addShotDistanceToSqlite(Context context, double distance, int rowNumber){
         DatabaseHelper dbHandler = new DatabaseHelper(context);
-        dbHandler.addShotScoreToDB(score, Round.getRoundID(), Hole.getHoleNumber(), shotNumber);
+        dbHandler.addDistanceToDB(distance, rowNumber);
+    }
+
+    public void addShotScoreToSqlite(Context context, double score, int rowNumber){
+        DatabaseHelper dbHandler = new DatabaseHelper(context);
+        dbHandler.addShotScoreToDB(score, rowNumber);
     }
 
     public double getShotLatitude() {
@@ -79,6 +83,9 @@ public abstract class Shot implements Parcelable{
         return shotScore;
     }
 
+    public int getSqliteRowNumber() {
+        return sqliteRowNumber;
+    }
 
     public void setDistanceOfShot(double distanceOfShot) {
         this.distanceOfShot = distanceOfShot;
@@ -115,6 +122,7 @@ public abstract class Shot implements Parcelable{
         dest.writeDouble(this.distanceOfShot);
         dest.writeDouble(this.shotDifficultyRating);
         dest.writeDouble(this.shotScore);
+        dest.writeInt(this.sqliteRowNumber);
     }
 
     protected Shot(Parcel in) {
@@ -124,6 +132,7 @@ public abstract class Shot implements Parcelable{
         this.distanceOfShot = in.readDouble();
         this.shotDifficultyRating = in.readDouble();
         this.shotScore = in.readDouble();
+        this.sqliteRowNumber = in.readInt();
     }
 
 

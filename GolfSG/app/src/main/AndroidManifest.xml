@@ -79,6 +79,10 @@
         <activity
             android:name=".RoundOfGolf.OnTheGreen"
             android:label="@string/title_activity_on_the_green"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".MapOfRound.MapScreen"
+            android:label="@string/title_activity_map_screen"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

@@ -193,6 +193,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }//addShotToDB
 
+    public int getLastInsertedRowId(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        final String MY_QUERY = "SELECT MAX(_id) FROM " + TABLE_SHOT;
+        Cursor cur = db.rawQuery(MY_QUERY, null);
+        cur.moveToFirst();
+        int ID = cur.getInt(0);
+        cur.close();
+        return ID;
+    }
+
     public void addFinalRatingToDB(Integer Id, Double rating){
         Log.i(TAG, "addFinalRatingToDB started");
         Log.i(TAG, "Id is: " + Id);
@@ -227,34 +237,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void addDistanceToDB(double distance, int roundId, int holeNumber, int shotNumber){
+    public void addDistanceToDB(double distance, int rowNumber){
         ContentValues values = new ContentValues();
         values.put(COLUMN_SHOT_DISTANCE, distance);
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String round = String.valueOf(roundId);
-        String shot = String.valueOf(shotNumber);
-        String hole = String.valueOf(holeNumber);
-        String[] args = new String[]{round};
-
-        db.update(TABLE_SHOT, values, "round_id = ?", args);
+        db.update(TABLE_SHOT, values, "_id = ?", new String[] {Integer.toString(rowNumber)});
         db.close();
     }
 
 
-    public void addShotScoreToDB(double score, int roundId, int holeNumber, int shotNumber){
+    public void addShotScoreToDB(double score, int rowNumber){
         ContentValues values = new ContentValues();
         values.put(COLUMN_SHOT_SCORE, score);
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String round = String.valueOf(roundId);
-        String shot = String.valueOf(shotNumber);
-        String hole = String.valueOf(holeNumber);
-        String[] args = new String[]{round};
-
-        db.update(TABLE_SHOT, values, "round_id = ?", args);
+        db.update(TABLE_SHOT, values, "_id = ?", new String[] {Integer.toString(rowNumber)});
         db.close();
     }
 

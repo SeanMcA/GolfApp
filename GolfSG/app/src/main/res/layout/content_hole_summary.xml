@@ -33,6 +33,13 @@
             android:layout_weight="1"></TableLayout>
 
         <Button
+            android:id="@+id/mapButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="View Hole on Map"
+            android:onClick="goToMapScreen"  />
+
+        <Button
             android:id="@+id/button"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

@@ -5,6 +5,9 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+
+import java.text.DecimalFormat;
 
 public class ShotScore{
     private static double shotDifficulty;
@@ -38,7 +41,7 @@ public class ShotScore{
             stroke.setDistanceOfShot(roundedOffDistance);
             shotDifficulty = getShotDifficulty(roundedOffDistance, lie);
             stroke.setShotDifficultyRating(shotDifficulty);
-            stroke.addShotDistanceToSqlite(context, shotDistance, i + 1);
+            stroke.addShotDistanceToSqlite(context, shotDistance, stroke.getSqliteRowNumber());
         }
         if(isPutt){
             int puttIndex = (hole.getShotList().size()) - 1;
@@ -64,24 +67,29 @@ public class ShotScore{
             Putt putt = (Putt) hole.getShotList().get(puttIndex);
             double puttDifficulty = putt.getShotDifficultyRating();
             int numberOfPutts = putt.getNumberOfPutts();
-            double puttScore = puttDifficulty - numberOfPutts;
+            DecimalFormat df = new DecimalFormat("####0.00");
+            double puttScore = Double.valueOf(df.format(puttDifficulty - numberOfPutts));
             putt.setShotScore(puttScore);
+            Log.i("TAG","calcShotScore sqlite row: " + putt.getSqliteRowNumber());
+            putt.addShotScoreToSqlite(context, puttScore, putt.getSqliteRowNumber());
         }
         for(int i = 0; i < size - 1; i++){
+            DecimalFormat df = new DecimalFormat("####0.00");
             Shot shot = hole.getShotList().get(i);
             Shot nextStroke = hole.getShotList().get(i + 1);
             double nextShotDifficultyRating = nextStroke.getShotDifficultyRating();
             double thisShotDifficultyRating = shot.getShotDifficultyRating();
             double currentScore = shot.getShotScore();
-            score = (thisShotDifficultyRating - nextShotDifficultyRating) - 1;
+            score = Double.valueOf(df.format((thisShotDifficultyRating - nextShotDifficultyRating) - 1));
             shot.setShotScore(currentScore + score);
-            double finalScore = shot.getShotScore();
-            shot.addShotScoreToSqlite(context, finalScore);
+            double finalScore = Double.valueOf(df.format(shot.getShotScore()));
+            shot.addShotScoreToSqlite(context, finalScore, shot.getSqliteRowNumber());
         }
         if(!isPutt){
             Shot shot = hole.getShotList().get(size - 1);
             score = (shot.getShotDifficultyRating()) - 1;
             shot.setShotScore(score);
+            shot.addShotScoreToSqlite(context, score, shot.getSqliteRowNumber());
         }
     }
 

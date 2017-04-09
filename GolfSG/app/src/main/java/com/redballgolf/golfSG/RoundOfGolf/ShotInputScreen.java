@@ -70,7 +70,7 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shot_input_screen);
 
-        Coordinates.registerObserver(this);
+        Coordinates.registerObserver(this);//todo - check if registered already
 
         LoggedInId = Preferences.getPreferences(this, "loginID");
         roundID = Preferences.getPreferencesInt(this, "roundID");
@@ -115,12 +115,14 @@ public class ShotInputScreen extends BaseActivity implements Observer, AdapterVi
                             putt = new Putt(place);
                             isPutt = true;
                             putt.addShotToSqlite(ShotInputScreen.this);
+                            putt.getInsertedRowIdAndUpdateVariable(ShotInputScreen.this);
                             hole.addShotToList(putt);
                             displayHoleAndShotNumber();
                         }else {
                             Log.i("TAG", "recording shot from OFF the green");
                             stroke = new Stroke(place);
                             stroke.addShotToSqlite(ShotInputScreen.this);
+                            stroke.getInsertedRowIdAndUpdateVariable(ShotInputScreen.this);
                             hole.addShotToList(stroke);
                             displayHoleAndShotNumber();
                         }

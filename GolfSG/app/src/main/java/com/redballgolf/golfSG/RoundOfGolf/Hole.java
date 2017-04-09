@@ -23,9 +23,9 @@ public class Hole implements Parcelable{
         ArrayList holeSummary = new ArrayList();
         Iterator listIterator = shotList.listIterator();
         while (listIterator.hasNext()) {
-            Stroke stroke = ((Stroke)listIterator.next());
+            Shot stroke = (Shot)listIterator.next();
             String lie = stroke.getLie();
-            Log.i("TAG","Hole - lie is: " + lie);
+            Log.i("TAG","Hole(getSummaryData) - lie is: " + lie);
             String score = String.valueOf(stroke.getShotScore());
             holeSummary.add(lie);
             holeSummary.add(score);
